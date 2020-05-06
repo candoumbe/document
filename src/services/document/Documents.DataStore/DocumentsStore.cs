@@ -22,13 +22,11 @@ namespace Documents.DataStore.SqlServer
             {
                 entity.OwnsOne(x => x.File, (file) =>
                 {
-
                     file.ToTable(nameof(Document.File));
                     file.Property(f => f.Content)
                         .IsRequired();
-
                 });
-                
+
                 entity.Property(x => x.Name)
                     .HasMaxLength(255)
                     .IsRequired();
@@ -36,7 +34,6 @@ namespace Documents.DataStore.SqlServer
                     .IsRequired()
                     .HasMaxLength(255)
                     .HasDefaultValue(Document.DefaultMimeType);
-
 
             });
         }
