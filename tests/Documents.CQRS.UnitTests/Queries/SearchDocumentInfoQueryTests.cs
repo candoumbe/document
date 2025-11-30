@@ -1,38 +1,37 @@
-﻿namespace Documents.CQRS.UnitTests.Queries
+﻿namespace Documents.CQRS.UnitTests.Queries;
+
+using Documents.CQRS.Queries;
+using Documents.DTO.v1;
+
+using FluentAssertions;
+
+using MedEasy.CQRS.Core.Queries;
+using MedEasy.DAL.Repositories;
+
+using System;
+
+using Xunit;
+using Xunit.Categories;
+
+[UnitTest]
+[Feature(nameof(Documents))]
+public class SearchDocumentInfoQueryTests
 {
-    using Documents.CQRS.Queries;
-    using Documents.DTO.v1;
+    [Fact]
+    public void IsAQuery() => typeof(SearchDocumentInfoQuery).Should()
+        .BeAssignableTo<IQuery<Guid, SearchDocumentInfo, Page<DocumentInfo>>>().And
+        .NotBeAbstract();
 
-    using FluentAssertions;
-
-    using MedEasy.CQRS.Core.Queries;
-    using MedEasy.DAL.Repositories;
-
-    using System;
-
-    using Xunit;
-    using Xunit.Categories;
-
-    [UnitTest]
-    [Feature(nameof(Documents))]
-    public class SearchDocumentInfoQueryTests
+    [Fact]
+    public void GivenNullParameter_Ctor_ThrowsArgumentNullException()
     {
-        [Fact]
-        public void IsAQuery() => typeof(SearchDocumentInfoQuery).Should()
-            .BeAssignableTo<IQuery<Guid, SearchDocumentInfo, Page<DocumentInfo>>>().And
-            .NotBeAbstract();
+        // Act
+        Action action = () => new SearchDocumentInfoQuery(null);
 
-        [Fact]
-        public void GivenNullParameter_Ctor_ThrowsArgumentNullException()
-        {
-            // Act
-            Action action = () => new SearchDocumentInfoQuery(null);
-
-            // Assert
-            action.Should()
-                .Throw<ArgumentNullException>().And
-                .ParamName.Should()
-                .NotBeNullOrWhiteSpace();
-        }
+        // Assert
+        action.Should()
+            .Throw<ArgumentNullException>().And
+            .ParamName.Should()
+            .NotBeNullOrWhiteSpace();
     }
 }

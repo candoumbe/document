@@ -1,17 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="..\..\..\..\..\tests.props" />
+  <Import Project="..\..\..\tests.props" />
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
   </PropertyGroup>
   
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\test\services\MedEasy.IntegrationTests.Core\MedEasy.IntegrationTests.Core.csproj" />
-    <ProjectReference Include="..\..\..\..\tools\MedEasy.Abstractions\MedEasy.Abstractions.csproj" />
-    <ProjectReference Include="..\..\..\..\tools\MedEasy.DAL.EFStore\MedEasy.DAL.EFStore.csproj" />
-    <ProjectReference Include="..\..\..\..\tools\MedEasy.DAL\MedEasy.DAL.csproj" />
-    <ProjectReference Include="..\..\Documents.CQRS\Documents.CQRS.csproj" />
-    <ProjectReference Include="..\..\Documents.DataStores\Documents.DataStores.csproj" />
-    <ProjectReference Include="..\..\Documents.Mapping\Documents.Mapping.csproj" />
-    <ProjectReference Include="..\..\Documents.Objects\Documents.Objects.csproj" />
+    <ProjectReference Include="..\..\src\Documents.DataStores\Documents.DataStores.csproj" />
+    <ProjectReference Include="..\..\src\Documents.Mapping\Documents.Mapping.csproj" />
+    <ProjectReference Include="..\..\src\Documents.Objects\Documents.Objects.csproj" />
   </ItemGroup>
 </Project>

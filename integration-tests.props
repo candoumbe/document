@@ -1,0 +1,11 @@
+<Project>
+  <Import Project="tests.props" />
+
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+    <IsIntegrationTestProject>true</IsIntegrationTestProject>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" />
+  </ItemGroup>
+</Project>

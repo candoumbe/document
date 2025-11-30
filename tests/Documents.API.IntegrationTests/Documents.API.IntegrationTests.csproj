@@ -1,17 +1,21 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <Import Project="..\..\..\..\..\integration-tests.props" />
+  <Import Project="..\..\tests.props" />
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NodaTime.Serialization.JsonNet" />
+    <PackageReference Include="MartinCostello.Logging.XUnit.v3"/>
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.Testing"/>
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\test\services\MedEasy.IntegrationTests.Core\MedEasy.IntegrationTests.Core.csproj" />
-    <ProjectReference Include="..\..\Documents.API\Documents.API.csproj" />
+    <ProjectReference Include="..\..\src\Documents.API\Documents.API.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Features\v1\" />
   </ItemGroup>
 
 </Project>

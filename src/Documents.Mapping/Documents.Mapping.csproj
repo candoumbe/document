@@ -1,12 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\tools\MedEasy.Mapping\MedEasy.Mapping.csproj" />
-    <ProjectReference Include="..\Documents.DTO\Documents.DTO.csproj" />
     <ProjectReference Include="..\Documents.Objects\Documents.Objects.csproj" />
   </ItemGroup>
 

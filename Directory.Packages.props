@@ -4,9 +4,82 @@
     <CentralPackageTransitivePinningEnabled>false</CentralPackageTransitivePinningEnabled>
   </PropertyGroup>
   <ItemGroup>
-    <PackageVersion Include="candoumbe.pipelines" Version="1.3.0" />
-    <PackageVersion Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.21.0" />
-    <PackageVersion Include="NodaTime.Serialization.JsonNet" Version="3.0.0" />
-    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL.NodaTime" Version="6.0.7" />
+    <PackageVersion Include="Aspire.Hosting.AppHost" Version="13.0.1" />
+    <PackageVersion Include="Aspire.Hosting.MongoDB" Version="13.0.0" />
+    <PackageVersion Include="Aspire.Hosting.Testing" Version="13.0.0" />
+    <PackageVersion Include="Aspire.Hosting.PostgreSQL" Version="13.0.1" />
+    <PackageVersion Include="Aspire.Npgsql" Version="13.0.0" />
+    <PackageVersion Include="Aspire.Npgsql.EntityFrameworkCore.PostgreSQL" Version="13.0.1" />
+
+    <PackageVersion Include="AwesomeAssertions" Version="8.2.0" />
+    <PackageVersion Include="Bogus" Version="35.6.5" />
+    <PackageVersion Include="Candoumbe.DataAccess" Version="0.1.0-beta.356" />
+    <PackageVersion Include="Candoumbe.DataAccess.Abstractions" Version="0.1.0-beta.356" />
+    <PackageVersion Include="Candoumbe.DataAccess.EFStore" Version="0.1.0-beta.356" />
+    <PackageVersion Include="Candoumbe.Forms" Version="0.3.0" />
+    <PackageVersion Include="Candoumbe.Pipelines" Version="1.3.0" />
+    <PackageVersion Include="Candoumbe.Types.Numerics" Version="0.4.2" />
+    <PackageVersion Include="CodecovUploader" Version="0.8.0" />
+    <PackageVersion Include="CorrelationId" Version="3.0.1" />
+    <PackageVersion Include="coverlet.msbuild" Version="6.0.4" />
+    <PackageVersion Include="DataFilters.Expressions" Version="0.13.2" />
+    <PackageVersion Include="Destructurama.ByIgnoring" Version="4.0.1" />
+    <PackageVersion Include="EntityFrameworkCore.Sqlite.NodaTime" Version="9.2.1" />
+    <PackageVersion Include="Extensions.Hosting.AsyncInitialization" Version="3.0.1" />
+    <PackageVersion Include="FakeItEasy" Version="8.3.0" />
+    <PackageVersion Include="FastEndpoints" Version="7.1.1" />
+    <PackageVersion Include="FastEndpoints.AspVersioning" Version="7.1.1" />
+    <PackageVersion Include="FastEndpoints.Swagger" Version="7.1.1" />
+    <PackageVersion Include="FluentAssertions.Nodatime" Version="2.0.1" />
+    <PackageVersion Include="FsCheck.Xunit.v3" Version="3.3.2" />
+    <PackageVersion Include="JetBrains.Annotations" Version="2025.2.1" />
+    <PackageVersion Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="9.0.11" />
+    <PackageVersion Include="Microsoft.AspNetCore.JsonPatch" Version="9.0.11" />
+    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.11" />
+    <PackageVersion Include="Microsoft.AspNetCore.TestHost" Version="9.0.11" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="10.0.0" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.0" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="10.0.0"/>
+    <PackageVersion Include="Microsoft.Extensions.Diagnostics.Testing" Version="9.10.0" />
+    <PackageVersion Include="Microsoft.Extensions.Hosting" Version="9.0.11" />
+    <PackageVersion Include="Microsoft.Extensions.Http.Resilience" Version="9.10.0" />
+    <PackageVersion Include="Microsoft.Extensions.ServiceDiscovery" Version="9.5.2" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
+    <PackageVersion Include="Microsoft.Testing.Extensions.CodeCoverage" Version="18.0.4" />
+    <PackageVersion Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.22.1" />
+    <PackageVersion Include="MartinCostello.Logging.XUnit.v3" Version="0.7.0" />
+    <PackageVersion Include="NodaTime.Bogus" Version="3.0.2" />
+    <PackageVersion Include="NodaTime.Serialization.JsonNet" Version="3.2.0" />
+    <PackageVersion Include="NodaTime.Serialization.SystemTextJson" Version="1.3.0" />
+    <PackageVersion Include="NodaTime.Testing" Version="3.2.2" />
+    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
+    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL.NodaTime" Version="9.0.4" />
+    <PackageVersion Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.14.0" />
+    <PackageVersion Include="OpenTelemetry.Extensions.Hosting" Version="1.14.0" />
+    <PackageVersion Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.14.0" />
+    <PackageVersion Include="OpenTelemetry.Instrumentation.Http" Version="1.14.0" />
+    <PackageVersion Include="OpenTelemetry.Instrumentation.Runtime" Version="1.14.0" />
+    <PackageVersion Include="Polly" Version="8.6.4" />
+    <PackageVersion Include="Scalar.AspNetCore" Version="2.11.0" />
+    <PackageVersion Include="Serialize.Linq" Version="4.0.167" />
+    <PackageVersion Include="ReportGenerator" Version="5.5.0" />
+    <PackageVersion Include="Roslynator.Analyzers" Version="4.14.1" />
+    <PackageVersion Include="Serilog.AspNetCore" Version="9.0.0" />
+    <PackageVersion Include="Serilog.Enrichers.CorrelationId" Version="3.0.1" />
+    <PackageVersion Include="Serilog.Settings.Configuration" Version="9.0.0" />
+    <PackageVersion Include="Serilog.Sinks.Console" Version="6.1.1" />
+    <PackageVersion Include="Serilog.Sinks.Seq" Version="9.0.0" />
+    <PackageVersion Include="StronglyTypedId" Version="1.0.0-beta08" PrivateAssets="all" ExcludeAssets="runtime" />
+    <PackageVersion Include="StronglyTypedId.Templates" Version="1.0.0-beta08" PrivateAssets="all" ExcludeAssets="runtime;compile" />
+    <PackageVersion Include="System.Text.Json" Version="10.0.0" />
+    <PackageVersion Include="SystemTextJsonPatch" Version="4.2.0" />
+    <PackageVersion Include="TestContainers.PostgreSql" Version="4.8.1" />
+    <PackageVersion Include="TngTech.ArchUnitNET.xUnitV3" Version="0.12.3" />
+    <PackageVersion Include="xRetry.v3" Version="0.1.0-alpha2" />
+    <PackageVersion Include="Xunit.DependencyInjection.Logging" Version="11.0.0" />
+    <PackageVersion Include="Xunit.OpenCategories.V3" Version="2.3.1.13" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.5" />
+    <PackageVersion Include="xunit.v3" Version="3.1.0" />
   </ItemGroup>
 </Project>
