@@ -78,7 +78,7 @@ public class Document : AuditableEntity<DocumentId, Document>
     }
 
     /// <summary>
-    /// Checks if the current instance holds same <see cref="File"/> as <see cref="other"/>
+    /// Checks if the current instance holds same <see cref="Document"/> as <paramref name="other"/>
     /// </summary>
     /// <param name="other"></param>
     /// <returns><c>true</c> if <see cref="other"/> has same content as the current instance

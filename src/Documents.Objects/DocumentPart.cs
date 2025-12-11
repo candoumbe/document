@@ -1,8 +1,11 @@
-﻿namespace Documents.Objects;
-
-using System;
+﻿using System;
 using Documents.Ids;
 
+namespace Documents.Objects;
+
+/// <summary>
+/// A chunk of a larger document.
+/// </summary>
 public class DocumentPart
 {
     /// <summary>
