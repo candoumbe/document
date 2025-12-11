@@ -41,6 +41,7 @@
         "Pack",
         "Publish",
         "PublishApi",
+        "RegenerateWorkflow",
         "Release",
         "RemoveMigration",
         "ReportIntegrationTestCoverage",

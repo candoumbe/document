@@ -88,7 +88,8 @@ public class Build : EnhancedNukeBuild,
     IReportUnitTestCoverage,
     IReportIntegrationTestCoverage,
     IPushNugetPackages,
-    ICreateGithubRelease
+    ICreateGithubRelease,
+    ICanRegenerateGitHubWorkflows
 {
 
     [Solution] [Required] public readonly Solution Solution;
