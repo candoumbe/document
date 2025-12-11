@@ -16,7 +16,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Documents.API\Documents.API.csproj" />
-    <ProjectReference Include="..\Documents.DataStores.Postgres\Documents.DataStores.Postgres.csproj" />
     <ProjectReference Include="..\Documents.Migrator\Documents.Migrator.csproj" />
   </ItemGroup>
 </Project>

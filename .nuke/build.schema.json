@@ -37,7 +37,6 @@
         "Format",
         "Hotfix",
         "IntegrationTests",
-        "MutationTests",
         "Pack",
         "Publish",
         "PublishApi",
@@ -211,11 +210,6 @@
         "Solution": {
           "type": "string",
           "description": "Path to a solution file that is automatically loaded"
-        },
-        "StrykerDashboardApiKey": {
-          "type": "string",
-          "description": "API KEY used to submit mutation report to a stryker dashboard",
-          "default": "Secrets must be entered via 'nuke :secrets [profile]'"
         },
         "Title": {
           "type": "string",

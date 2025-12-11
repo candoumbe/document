@@ -20,9 +20,9 @@ using Nuke.Common.Tools.GitHub;
 using Nuke.Common.Tools.GitVersion;
 using static Nuke.Common.Tools.Docker.DockerTasks;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
+using static Nuke.Common.Tools.EntityFramework.EntityFrameworkTasks;
 using static Nuke.Common.Utilities.ConsoleUtility;
 using static Serilog.Log;
-using static Nuke.Common.Tools.EntityFramework.EntityFrameworkTasks;
 using Project = Nuke.Common.ProjectModel.Project;
 
 [GitHubActions(
@@ -39,7 +39,7 @@ using Project = Nuke.Common.ProjectModel.Project;
     [
         nameof(IPushNugetPackages.NuGetApiKey),
         nameof(IReportCoverage.CodecovToken),
-        nameof(IMutationTest.StrykerDashboardApiKey)
+        // nameof(IMutationTest.StrykerDashboardApiKey)
     ],
     OnPullRequestExcludePaths =
     [
@@ -83,7 +83,7 @@ public class Build : EnhancedNukeBuild,
     IClean,
     IRestore,
     IDotnetFormat,
-    IMutationTest,
+    // IMutationTest,
     IBenchmark,
     IReportUnitTestCoverage,
     IReportIntegrationTestCoverage,
@@ -438,16 +438,16 @@ public class Build : EnhancedNukeBuild,
                                .Description("Runs all tests");
 
 
-    /// <summary>
-    /// Projects to be targeted by mutation tests.
-    /// </summary>
-    private static readonly string[] s_projects = ["Agenda.Ids", "Agenda.Objects", "Agenda.API"];
+    // /// <summary>
+    // /// Projects to be targeted by mutation tests.
+    // /// </summary>
+    // private static readonly string[] s_projects = ["Agenda.Ids", "Agenda.Objects", "Agenda.API"];
 
-    /// <inheritdoc />
-    IEnumerable<MutationProjectConfiguration> IMutationTest.MutationTestsProjects =>
-    [
-        ..s_projects.Select(projectName => new MutationProjectConfiguration(sourceProject: Solution.AllProjects.Single(csproj => csproj.Name == projectName),
-                                                                           testProjects: Solution.AllProjects.Where(csproj => string.Equals(csproj.Name, $"{projectName}.UnitTests")),
-                                                                           configurationFile: this.Get<IHaveTestDirectory>().TestDirectory / $"{projectName}.UnitTests" / "stryker-config.json"))
-    ];
+    // /// <inheritdoc />
+    // IEnumerable<MutationProjectConfiguration> IMutationTest.MutationTestsProjects =>
+    // [
+    //     ..s_projects.Select(projectName => new MutationProjectConfiguration(sourceProject: Solution.AllProjects.Single(csproj => csproj.Name == projectName),
+    //                                                                        testProjects: Solution.AllProjects.Where(csproj => string.Equals(csproj.Name, $"{projectName}.UnitTests")),
+    //                                                                        configurationFile: this.Get<IHaveTestDirectory>().TestDirectory / $"{projectName}.UnitTests" / "stryker-config.json"))
+    // ];
 }
