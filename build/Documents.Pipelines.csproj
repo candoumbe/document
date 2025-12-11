@@ -20,4 +20,8 @@
     <PackageDownload Include="dotnet-ef" Version="[10.0.0]" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EditorConfigFiles Remove=".editorconfig" />
+  </ItemGroup>
+
 </Project>
