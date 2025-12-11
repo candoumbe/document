@@ -4,6 +4,7 @@ using Bogus;
 using Candoumbe.DataAccess.Abstractions;
 using Candoumbe.DataAccess.EFStore;
 using Candoumbe.Types.Numerics;
+using Documents.API.Features;
 using Documents.API.Features.v1;
 using Documents.API.Features.v1.GetById;
 using Documents.API.UnitTests.Fixtures;
@@ -92,22 +93,23 @@ public class GetByIdEndpointShould : IClassFixture<PostgresSqlFixture>
 
 
         // Act
-        Results<Ok<DocumentInfo>, NotFound> result = await _sut.ExecuteAsync(documentId, ct: TestContext.Current.CancellationToken);
+        Results<Ok<Browsable<DocumentInfo>>, NotFound> result = await _sut.ExecuteAsync(documentId, ct: TestContext.Current.CancellationToken);
 
         // Assert
-        result.Should().BeAssignableTo<Ok<DocumentInfo>>();
-        Ok<DocumentInfo> okResult = result.As<Ok<DocumentInfo>>();
-        okResult.Value.Id.Should().Be(documentId);
+        result.Result.Should().BeAssignableTo<Ok<Browsable<DocumentInfo>>>();
+        Ok<Browsable<DocumentInfo>> okResult = result.Result.As<Ok<Browsable<DocumentInfo>>>();
+        Browsable<DocumentInfo> browsable = okResult.Value;
+        browsable.Resource.Id.Should().Be(documentId);
     }
 
     [Fact]
     public async Task Returns_NotFound_when_the_request_does_not_match_an_existing_document()
     {
         // Act
-        Results<Ok<DocumentInfo>, NotFound> result = await _sut.ExecuteAsync(DocumentId.New(), TestContext.Current.CancellationToken);
+        Results<Ok<Browsable<DocumentInfo>>, NotFound> result = await _sut.ExecuteAsync(DocumentId.New(), TestContext.Current.CancellationToken);
 
         // Assert
-        result.Should().BeAssignableTo<NotFound>();
+        result.Result.Should().BeAssignableTo<NotFound>();
     }
 
 }
