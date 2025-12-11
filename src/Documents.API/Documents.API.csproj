@@ -38,8 +38,9 @@
     <PackageReference Include="SystemTextJsonPatch" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Documents.DataStores.Sqlite\Documents.DataStores.Sqlite.csproj" />
     <ProjectReference Include="..\Documents.DataStores\Documents.DataStores.csproj" />
+    <ProjectReference Include="..\Documents.DataStores.Sqlite\Documents.DataStores.Sqlite.csproj" />
+    <ProjectReference Include="..\Documents.DataStores.Postgres\Documents.DataStores.Postgres.csproj" />
     <ProjectReference Include="..\Documents.ServiceDefaults\Documents.ServiceDefaults.csproj" />
   </ItemGroup>
 

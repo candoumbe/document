@@ -38,7 +38,7 @@ builder.AddNpgsqlDbContext<DocumentsStore>("postgres",
     configureDbContextOptions: optionsBuilder =>
     {
         optionsBuilder.UseNpgsql(o => o.UseNodaTime()
-            .MigrationsAssembly("Agenda.DataStores.Postgres"));
+            .MigrationsAssembly("Documents.DataStores.Postgres"));
     });
 builder.Services.AddDataStores();
 builder.Services.AddSerilog();
@@ -48,10 +48,11 @@ builder.Services
     {
         options.ShortSchemaNames = true;
         options.ShowDeprecatedOps = true;
+        options.MaxEndpointVersion = 1;
         options.DocumentSettings = docSettings =>
         {
             docSettings.DocumentName = "v1";
-            docSettings.Version = "v1";
+            docSettings.Version = "1";
             docSettings.SchemaSettings.AllowReferencesWithProperties = true;
             docSettings.SchemaSettings.TypeMappers.Add(new NumberTypeMapper<PositiveInteger, int>());
             docSettings.SchemaSettings.TypeMappers.Add(new NumberTypeMapper<NonNegativeInteger, int>());
@@ -71,9 +72,11 @@ builder.Services.AddFastEndpoints(options => options.IncludeAbstractValidators =
 
 WebApplication app = builder.Build();
 
-// app.UseSerilogRequestLogging(opts => opts.EnrichDiagnosticContext = (diagnosticContext, httpContext) => diagnosticContext.Set("CorrelationId", httpContext.TraceIdentifier));
+app.UseSerilogRequestLogging(opts => opts.EnrichDiagnosticContext = (diagnosticContext, httpContext) => diagnosticContext.Set("CorrelationId", httpContext.TraceIdentifier));
 app.UseFastEndpoints(config =>
 {
+    config.Versioning.Prefix = "v";
+    config.Versioning.DefaultVersion = 1;
     config.Binding.ValueParserFor<DocumentId>(values => new ParseResult(DocumentId.TryParse(values.ToString(), CultureInfo.InvariantCulture, out DocumentId id), id));
     config.Binding.ValueParserFor<NonNegativeLong>(values => new ParseResult(long.TryParse(values.ToString(), out long value)
                                                                              && NonNegativeLong.MinValue <= value && value <= NonNegativeLong.MaxValue, NonNegativeLong.From(value)));

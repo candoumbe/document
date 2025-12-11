@@ -1,0 +1,40 @@
+<Solution>
+  <Folder Name="/build/">
+    <Project Path="build/Documents.Pipelines.csproj">
+      <Build Project="false" />
+    </Project>
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/Documents.Aspire/Documents.Aspire.csproj" />
+    <Project Path="src/Documents.Migrator/Documents.Migrator.csproj" />
+    <Project Path="src/Documents.ServiceDefaults/Documents.ServiceDefaults.csproj" />
+  </Folder>
+  <Folder Name="/src/Documents.API/">
+    <Project Path="src/Documents.API/Documents.API.csproj" />
+  </Folder>
+  <Folder Name="/src/Documents.DataStores.Postgres/">
+    <Project Path="src/Documents.DataStores.Postgres/Documents.DataStores.Postgres.csproj" />
+  </Folder>
+  <Folder Name="/src/Documents.DataStores.Sqlite/">
+    <Project Path="src/Documents.DataStores.Sqlite/Documents.DataStores.Sqlite.csproj" />
+  </Folder>
+  <Folder Name="/src/Documents.DataStores/">
+    <Project Path="src/Documents.DataStores/Documents.DataStores.csproj" />
+  </Folder>
+  <Folder Name="/src/Documents.Ids/">
+    <Project Path="src/Documents.Ids/Documents.Ids.csproj" />
+  </Folder>
+  <Folder Name="/src/Documents.Objects/">
+    <Project Path="src/Documents.Objects/Documents.Objects.csproj" />
+  </Folder>
+  <Folder Name="/tests/" />
+  <Folder Name="/tests/Documents.API.IntegrationTests/">
+    <Project Path="tests/Documents.API.IntegrationTests/Documents.API.IntegrationTests.csproj" />
+  </Folder>
+  <Folder Name="/tests/Documents.API.UnitTests/">
+    <Project Path="tests/Documents.API.UnitTests/Documents.API.UnitTests.csproj" />
+  </Folder>
+  <Folder Name="/tests/Documents.Objects.Tests/">
+    <Project Path="tests/Documents.Objects.Tests/Documents.Objects.Tests.csproj" />
+  </Folder>
+</Solution>

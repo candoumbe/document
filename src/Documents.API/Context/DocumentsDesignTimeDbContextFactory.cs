@@ -21,8 +21,8 @@ public class DocumentsDesignTimeDbContextFactory : IDesignTimeDbContextFactory<D
     {
         IConfigurationRoot configuration = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.Development.json")
-            .AddJsonFile("appsettings.IntegrationTest.json")
+            .AddJsonFile("appsettings.Development.json", optional: true)
+            .AddJsonFile("appsettings.IntegrationTest.json", optional: true)
             .AddCommandLine(args)
             .Build();
 

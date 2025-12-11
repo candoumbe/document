@@ -40,7 +40,7 @@ public class SearchDocumentsEndpoint : Endpoint<SearchDocumentQuery, PageOf<Brow
     {
         Verbs(Http.GET, Http.HEAD);
         Routes("/documents/search");
-        Version(1);
+        Version(1, deprecateAt: 2);
         AllowAnonymous();
     }
 
@@ -168,8 +168,12 @@ public class SearchDocumentsEndpoint : Endpoint<SearchDocumentQuery, PageOf<Brow
                 filters.Add($"{nameof(DocumentInfo.MimeType)}={req.MimeType}".ToFilter<DocumentInfo>());
             }
 
-            MultiFilter multiFilter = new() { Logic = FilterLogic.And, Filters = filters };
-            Expression<Func<Document, bool>> expression = multiFilter.ToExpression<Document>();
+            IFilter filter = filters switch
+            {
+                { Count: > 0 } => new MultiFilter { Logic = FilterLogic.And, Filters = filters },
+                _ => Filter.True
+            };
+            Expression<Func<Document, bool>> expression = filter.ToExpression<Document>();
 
             return new FilterSpecification<Document>(expression);
         }

@@ -1,12 +1,9 @@
-﻿using Candoumbe.Types.Numerics;
-using Documents.Ids;
+﻿using Candoumbe.DataAccess.Abstractions;
 using Documents.Objects;
-
-namespace Documents.DataStores;
-
-using Candoumbe.DataAccess.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using NodaTime;
+
+namespace Documents.DataStores;
 
 public class DocumentsStore : DataStore<DocumentsStore>
 {
@@ -20,40 +17,6 @@ public class DocumentsStore : DataStore<DocumentsStore>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-
-        modelBuilder.Entity<Document>(entity =>
-        {
-            entity.HasMany(x => x.Parts)
-                .WithOne()
-                .HasForeignKey(part => part.DocumentId)
-                .HasPrincipalKey(doc => doc.Id);
-
-            entity.Property(x => x.Status)
-                .HasConversion<string>()
-                .HasDefaultValue(Status.Ongoing);
-
-            entity.Property(x => x.Name)
-                .HasMaxLength(255)
-                .IsRequired();
-
-            entity.Property(x => x.MimeType)
-                .IsRequired()
-                .HasMaxLength(255)
-                .HasDefaultValue(Document.DefaultMimeType);
-
-            entity.Property(x => x.Size)
-                .HasConversion(valueObject => valueObject.Value, value => NonNegativeLong.From(value));
-        });
-
-        modelBuilder.Entity<Document>().Property(x => x.Id).HasConversion<DocumentId.EfCoreValueConverter>();
-
-
-        modelBuilder.Entity<DocumentPart>(file =>
-        {
-            file.HasKey(x => new { x.DocumentId, x.Position });
-
-            file.Property(f => f.Content)
-                .IsRequired();
-        });
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(DocumentEntityTypeConfiguration).Assembly);
     }
 }
