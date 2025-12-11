@@ -1,10 +1,8 @@
 
-using Documents.Ids;
-
-using FluentAssertions;
-
 using System;
 using Candoumbe.Types.Numerics;
+using Documents.Ids;
+using FluentAssertions;
 using Xunit;
 using Xunit.OpenCategories.V3;
 

@@ -1,15 +1,9 @@
-﻿namespace Documents.API.Context;
-
-using Documents.DataStores;
+﻿using Documents.DataStores;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Microsoft.Extensions.Configuration;
-
 using NodaTime;
 
-using System;
-using System.IO;
+namespace Documents.API.Context;
 
 /// <summary>
 /// <see cref="IDesignTimeDbContextFactory{TContext}"/> implementation for <see cref="DocumentsStore"/>.

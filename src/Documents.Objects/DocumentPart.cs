@@ -1,8 +1,7 @@
 ﻿namespace Documents.Objects;
 
-using Documents.Ids;
-
 using System;
+using Documents.Ids;
 
 public class DocumentPart
 {

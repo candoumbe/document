@@ -5,7 +5,6 @@ using Documents.Ids;
 using Documents.Objects;
 using FastEndpoints;
 using Microsoft.AspNetCore.Http.HttpResults;
-using Optional;
 
 namespace Documents.API.Features.v1.Create
 {

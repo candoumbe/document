@@ -1,6 +1,6 @@
+using System;
 using Documents.Ids;
 using FluentAssertions;
-using System;
 using Xunit;
 
 namespace Documents.Objects.Tests;

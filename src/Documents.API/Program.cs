@@ -14,7 +14,6 @@ using Microsoft.AspNetCore.Http.Json;
 using Microsoft.EntityFrameworkCore;
 using NodaTime;
 using NodaTime.Serialization.SystemTextJson;
-using NSwag.Generation.Processors;
 using Scalar.AspNetCore;
 using Serilog;
 using SystemTextJsonPatch.Operations;

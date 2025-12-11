@@ -1,8 +1,8 @@
-﻿using Candoumbe.DataAccess.Abstractions.Entities;
+﻿using System;
+using System.Collections.Generic;
+using Candoumbe.DataAccess.Abstractions.Entities;
 using Candoumbe.Types.Numerics;
 using Documents.Ids;
-using System;
-using System.Collections.Generic;
 
 namespace Documents.Objects;
 
