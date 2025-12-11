@@ -1,0 +1,7 @@
+{
+  "$schema": "build.schema.json",
+  "NoLogo": true,
+  "AutoStash": true,
+  "DeleteLocalOnSuccess": true,
+  "GitHubToken": "v1:J9vPksCm183Rvs79VpalXD32ck4nwjlsAx/qSA40o0tYs36DN60xkOUdL9KjXcvofuVMRuBJSd4VQi/lEdKAVmmqf+zQGq04Gx5oRwmZBLsp8/l3nhxrEGTu5WjUqqTQ"
+}
