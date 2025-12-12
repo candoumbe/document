@@ -6,16 +6,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Aspire.Hosting.Testing" />
     <PackageReference Include="MartinCostello.Logging.XUnit.v3"/>
     <PackageReference Include="Microsoft.Extensions.Diagnostics.Testing"/>
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Documents.API\Documents.API.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Features\v1\" />
+    <ProjectReference Include="..\..\src\Documents.Aspire\Documents.Aspire.csproj" />
   </ItemGroup>
 
 </Project>

@@ -71,7 +71,7 @@ builder.Services.AddFastEndpoints(options => options.IncludeAbstractValidators =
 
 WebApplication app = builder.Build();
 
-app.UseSerilogRequestLogging(opts => opts.EnrichDiagnosticContext = (diagnosticContext, httpContext) => diagnosticContext.Set("CorrelationId", httpContext.TraceIdentifier));
+//app.UseSerilogRequestLogging(opts => opts.EnrichDiagnosticContext = (diagnosticContext, httpContext) => diagnosticContext.Set("CorrelationId", httpContext.TraceIdentifier));
 app.UseFastEndpoints(config =>
 {
     config.Versioning.Prefix = "v";
@@ -110,7 +110,7 @@ app.MapScalarApiReference(opts =>
     [
         new ScalarDocument("v1", "Documents API v1", IsDefault: true)
     ]);
-    opts.DotNetFlag = true;
+    opts.ForceDarkMode();
 });
 
 await app.RunAsync().ConfigureAwait(false);
