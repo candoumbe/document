@@ -13,8 +13,6 @@
 
   <ItemGroup>
     <AdditionalFiles Include="guid-v7.typedid" />
-    <None Remove="guid-v7.typedid" />
-    <AdditionalFiles Include="guid-v7.typedid" />
   </ItemGroup>
 
 </Project>
