@@ -2,6 +2,7 @@ using System.Globalization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Asp.Versioning;
+using Asp.Versioning.Conventions;
 using Candoumbe.Types.Numerics;
 using Documents.API;
 using Documents.API.TypeMappers;
@@ -28,6 +29,15 @@ Action<JsonSerializerOptions> optionsSerializerSettings = s =>
     s.Converters.Add(new JsonStringEnumConverter<OperationType>());
 };
 
+// Api versions that are currently suported
+VersionSets.CreateApi("documents",
+    v =>
+    {
+        v.HasApiVersion(1.0);
+        v.HasApiVersion(2.0);
+    });
+
+
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
@@ -50,13 +60,13 @@ builder.Services
         options.MaxEndpointVersion = 1;
         options.DocumentSettings = docSettings =>
         {
-            docSettings.DocumentName = "v1";
-            docSettings.Version = "1";
+            docSettings.ApiVersion(new(1.0));
             docSettings.SchemaSettings.AllowReferencesWithProperties = true;
             docSettings.SchemaSettings.TypeMappers.Add(new NumberTypeMapper<PositiveInteger, int>());
             docSettings.SchemaSettings.TypeMappers.Add(new NumberTypeMapper<NonNegativeInteger, int>());
         };
         options.SerializerSettings = optionsSerializerSettings;
+        options.AutoTagPathSegmentIndex = 0;
     });
 
 builder.Services.AddFastEndpoints(options => options.IncludeAbstractValidators = false)
@@ -65,7 +75,10 @@ builder.Services.AddFastEndpoints(options => options.IncludeAbstractValidators =
         options.DefaultApiVersion = new ApiVersion(1, 0);
         options.AssumeDefaultVersionWhenUnspecified = true;
         options.ReportApiVersions = true;
-        options.ApiVersionReader = new HeaderApiVersionReader("api-version");
+        HeaderApiVersionReader optionsApiVersionReader = new HeaderApiVersionReader("api-version");
+        optionsApiVersionReader.VersionsByHeader();
+        optionsApiVersionReader.VersionsByMediaType();
+        options.ApiVersionReader = optionsApiVersionReader;
         options.UnsupportedApiVersionStatusCode = Status400BadRequest;
     });
 
@@ -74,8 +87,6 @@ WebApplication app = builder.Build();
 //app.UseSerilogRequestLogging(opts => opts.EnrichDiagnosticContext = (diagnosticContext, httpContext) => diagnosticContext.Set("CorrelationId", httpContext.TraceIdentifier));
 app.UseFastEndpoints(config =>
 {
-    config.Versioning.Prefix = "v";
-    config.Versioning.DefaultVersion = 1;
     config.Binding.ValueParserFor<DocumentId>(values => new ParseResult(DocumentId.TryParse(values.ToString(), CultureInfo.InvariantCulture, out DocumentId id), id));
     config.Binding.ValueParserFor<NonNegativeLong>(values => new ParseResult(long.TryParse(values.ToString(), out long value)
                                                                              && NonNegativeLong.MinValue <= value && value <= NonNegativeLong.MaxValue, NonNegativeLong.From(value)));

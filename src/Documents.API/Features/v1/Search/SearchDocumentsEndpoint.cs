@@ -1,4 +1,5 @@
 using System.Linq.Expressions;
+using Asp.Versioning.Builder;
 using Candoumbe.DataAccess.Abstractions;
 using Candoumbe.DataAccess.Repositories;
 using Candoumbe.Forms;
@@ -6,6 +7,7 @@ using DataFilters;
 using Documents.API.Features.v1.GetById;
 using Documents.Objects;
 using FastEndpoints;
+using FastEndpoints.AspVersioning;
 using Microsoft.Extensions.Options;
 using OrderDirection = Candoumbe.DataAccess.Abstractions.OrderDirection;
 
@@ -40,7 +42,11 @@ public class SearchDocumentsEndpoint : Endpoint<SearchDocumentQuery, PageOf<Brow
     {
         Verbs(Http.GET, Http.HEAD);
         Routes("/documents/search");
-        Version(1, deprecateAt: 2);
+        Options(x => x
+            .WithVersionSet("documents")
+            .MapToApiVersion(1.0)
+            .HasDeprecatedApiVersion(2.0));
+
         AllowAnonymous();
     }
 

@@ -14,6 +14,7 @@ using Candoumbe.Types.Numerics;
 using DataFilters.Converters;
 using Documents.API.Features;
 using Documents.API.Features.v1;
+using Documents.API.Features.v1.Create;
 using Documents.API.IntegrationTests.Fixtures;
 using Documents.Ids;
 using FluentAssertions;
@@ -77,16 +78,12 @@ public class CreateDocumentEndpointShould(ITestOutputHelper outputHelper) : IAsy
 
         outputHelper.WriteLine("Client: " + _client.BaseAddress);
 
-        DocumentInfo newDocumentInfo = new ()
+        CreateDocumentRequest newDocumentInfo = new ()
         {
             Id = DocumentId.New(),
             Name = s_faker.System.FileName(),
-            Hash = s_faker.Random.Hash(),
             MimeType = "text/plain",
-            Size = NonNegativeLong.One,
-            CreatedAt = s_faker.Noda().Instant.Recent(),
-            UpdatedAt = s_faker.Noda().Instant.Recent()
-
+            Content = s_faker.Random.Bytes(s_faker.Random.Int(32, 64))
         };
 
         // Act

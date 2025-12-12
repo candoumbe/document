@@ -3,6 +3,7 @@ using Candoumbe.Forms;
 using Documents.Ids;
 using Documents.Objects;
 using FastEndpoints;
+using FastEndpoints.AspVersioning;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Optional;
 
@@ -32,7 +33,7 @@ public class GetByIdEndpoint : Endpoint<DocumentId, Results<Ok<Browsable<Documen
     {
         Verbs(Http.GET, Http.HEAD);
         Routes("/documents/{id:guid}");
-        Version(1);
+        Options(x => x.WithVersionSet("documents").MapToApiVersion(1.0));
         AllowAnonymous();
     }
 

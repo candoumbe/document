@@ -1,9 +1,12 @@
 using System.Security.Cryptography;
 using Candoumbe.DataAccess.Abstractions;
+using Candoumbe.Forms;
 using Candoumbe.Types.Numerics;
+using Documents.API.Features.v1.GetById;
 using Documents.Ids;
 using Documents.Objects;
 using FastEndpoints;
+using FastEndpoints.AspVersioning;
 using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace Documents.API.Features.v1.Create
@@ -14,21 +17,24 @@ namespace Documents.API.Features.v1.Create
     public class CreateDocumentEndpoint : Endpoint<CreateDocumentRequest, Results<Conflict, Created<Browsable<DocumentInfo>>>>
     {
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+        private readonly LinkGenerator _linkGenerator;
 
         /// <summary>
         /// Builds a new <see cref="CreateDocumentEndpoint"/> instance.
         /// </summary>
         /// <param name="unitOfWorkFactory"></param>
-        public CreateDocumentEndpoint(IUnitOfWorkFactory unitOfWorkFactory)
+        /// <param name="linkGenerator"></param>
+        public CreateDocumentEndpoint(IUnitOfWorkFactory unitOfWorkFactory, LinkGenerator linkGenerator)
         {
             _unitOfWorkFactory = unitOfWorkFactory;
+            _linkGenerator = linkGenerator;
         }
 
         /// <inheritdoc />
         public override void Configure()
         {
             Post("/documents");
-            Version(1);
+            Options(x => x.WithVersionSet("documents").MapToApiVersion(1.0));
             AllowAnonymous();
         }
 
@@ -68,7 +74,10 @@ namespace Documents.API.Features.v1.Create
                         Name = document.Name,
                         UpdatedAt = document.UpdatedDate
                     },
-                    Links = []
+                    Links =
+                    [
+                        new Link { Href= _linkGenerator.GetUriByName(HttpContext, IEndpoint.GetName<GetByIdEndpoint>(Http.GET), new { document.Id }), Relations = [LinkRelation.Self]}
+                    ]
                 });
         }
     }

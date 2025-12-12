@@ -4,6 +4,7 @@ using Candoumbe.Forms;
 using Documents.API.Features.v1.Search;
 using Documents.Objects;
 using FastEndpoints;
+using FastEndpoints.AspVersioning;
 
 namespace Documents.API.Features.v1.List;
 
@@ -30,7 +31,7 @@ public class ListdocumentsEndpoint : Endpoint<ListDocumentsRequest, PageOf<Brows
     public override void Configure()
     {
         Verbs(Http.GET, Http.HEAD);
-        Version(1);
+        Options(x => x.WithVersionSet("documents").MapToApiVersion(1.0));
         Routes("/documents");
         AllowAnonymous();
     }

@@ -2,6 +2,7 @@ using Candoumbe.DataAccess.Abstractions;
 using Documents.Ids;
 using Documents.Objects;
 using FastEndpoints;
+using FastEndpoints.AspVersioning;
 using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace Documents.API.Features.v1.Delete;
@@ -26,7 +27,7 @@ public class DeleteByIdEndpoint : Endpoint<DocumentId, Results<NotFound, NoConte
     public override void Configure()
     {
         Delete("/documents/{id:guid}");
-        Version(1);
+        Options(x => x.WithVersionSet("documents").MapToApiVersion(1.0));
         AllowAnonymous();
     }
 

@@ -1,5 +1,6 @@
 using Documents.Ids;
 using FastEndpoints;
+using FastEndpoints.AspVersioning;
 using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace Documents.API.Features.v1.Update;
@@ -13,7 +14,7 @@ public class UpdateDocumentByItsIdEndpoint : Endpoint<DocumentId, Results<NotFou
     public override void Configure()
     {
         Put("/documents/{id:guid}");
-        Version(1);
+        Options(x => x.WithVersionSet("documents").MapToApiVersion(1.0));
         AllowAnonymous();
     }
 
