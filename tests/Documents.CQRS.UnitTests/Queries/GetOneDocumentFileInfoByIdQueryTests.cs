@@ -1,39 +1,38 @@
-﻿namespace Documents.CQRS.UnitTests.Queries
+﻿namespace Documents.CQRS.UnitTests.Queries;
+
+using Documents.CQRS.Queries;
+using Documents.DTO.v1;
+using Documents.Ids;
+
+using FluentAssertions;
+
+using MedEasy.CQRS.Core.Queries;
+
+using System;
+using System.Collections.Generic;
+
+using Xunit;
+using Xunit.Categories;
+
+[UnitTest]
+public class GetOneDocumentFileInfoByIdQueryTests
 {
-    using Documents.CQRS.Queries;
-    using Documents.DTO.v1;
-    using Documents.Ids;
+    [Fact]
+    public void IsQuery() => typeof(GetOneDocumentFileInfoByIdQuery).Should()
+        .BeAssignableTo<IQuery<Guid, DocumentId, IAsyncEnumerable<DocumentPartInfo>>>();
 
-    using FluentAssertions;
-
-    using MedEasy.CQRS.Core.Queries;
-
-    using System;
-    using System.Collections.Generic;
-
-    using Xunit;
-    using Xunit.Categories;
-
-    [UnitTest]
-    public class GetOneDocumentFileInfoByIdQueryTests
+    [Fact]
+    public void Has_A_Unique_Identifier()
     {
-        [Fact]
-        public void IsQuery() => typeof(GetOneDocumentFileInfoByIdQuery).Should()
-            .BeAssignableTo<IQuery<Guid, DocumentId, IAsyncEnumerable<DocumentPartInfo>>>();
+        // Arrange
+        DocumentId documentId = DocumentId.New();
 
-        [Fact]
-        public void Has_A_Unique_Identifier()
-        {
-            // Arrange
-            DocumentId documentId = DocumentId.New();
+        // Act
+        GetOneDocumentFileInfoByIdQuery instance = new(documentId);
 
-            // Act
-            GetOneDocumentFileInfoByIdQuery instance = new(documentId);
-
-            // Assert
-            instance.Id.Should()
-                .NotBe(Guid.Empty).And
-                .NotBe(documentId.Value);
-        }
+        // Assert
+        instance.Id.Should()
+            .NotBe(Guid.Empty).And
+            .NotBe(documentId.Value);
     }
 }

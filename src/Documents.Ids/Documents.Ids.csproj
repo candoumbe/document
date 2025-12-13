@@ -1,11 +1,18 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+  <Import Project="../../core.props"/>
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\tools\MedEasy.Ids\MedEasy.Ids.csproj" />
+    <PackageReference Include="StronglyTypedId"/>
+    <PackageReference Include="StronglyTypedId.Templates"/>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="guid-v7.typedid" />
   </ItemGroup>
 
 </Project>

@@ -1,73 +1,135 @@
-namespace Documents.API
+using System.Globalization;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using Asp.Versioning;
+using Asp.Versioning.Conventions;
+using Candoumbe.Types.Numerics;
+using Documents.API;
+using Documents.API.TypeMappers;
+using Documents.DataStores;
+using Documents.Ids;
+using FastEndpoints;
+using FastEndpoints.AspVersioning;
+using FastEndpoints.Swagger;
+using Microsoft.AspNetCore.Http.Json;
+using Microsoft.EntityFrameworkCore;
+using NodaTime;
+using NodaTime.Serialization.SystemTextJson;
+using Scalar.AspNetCore;
+using Serilog;
+using SystemTextJsonPatch.Operations;
+using static Microsoft.AspNetCore.Http.StatusCodes;
+
+Action<JsonSerializerOptions> optionsSerializerSettings = s =>
 {
-    using Microsoft.AspNetCore.Hosting;
-    using Microsoft.Extensions.Configuration;
-    using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Hosting;
-    using Microsoft.Extensions.Logging;
+    //s.PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower;
+    s.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+    s.AllowTrailingCommas = true;
+    s.ConfigureForNodaTime(DateTimeZoneProviders.Tzdb);
+    s.Converters.Add(new JsonStringEnumConverter<OperationType>());
+};
 
-    using Serilog;
-
-    using System;
-    using System.Diagnostics;
-    using System.Threading.Tasks;
-
-    public class Program
+// Api versions that are currently suported
+VersionSets.CreateApi("documents",
+    v =>
     {
-        public static async Task Main(string[] args)
+        v.HasApiVersion(1.0);
+        v.HasApiVersion(2.0);
+    });
+
+
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+
+builder.AddServiceDefaults();
+builder.Services.AddCustomizedDependencyInjection();
+builder.Services.AddCustomOptions(builder.Configuration);
+builder.AddNpgsqlDbContext<DocumentsStore>("postgres",
+    configureDbContextOptions: optionsBuilder =>
+    {
+        optionsBuilder.UseNpgsql(o => o.UseNodaTime()
+            .MigrationsAssembly("Documents.DataStores.Postgres"));
+    });
+builder.Services.AddDataStores();
+builder.Services.AddSerilog();
+builder.Services.Configure<JsonOptions>(c => optionsSerializerSettings.Invoke(c.SerializerOptions));
+builder.Services
+    .SwaggerDocument(options =>
+    {
+        options.ShortSchemaNames = true;
+        options.ShowDeprecatedOps = true;
+        options.MaxEndpointVersion = 1;
+        options.DocumentSettings = docSettings =>
         {
-            Activity.DefaultIdFormat = ActivityIdFormat.W3C;
-            IHost host = CreateHostBuilder(args).Build();
+            docSettings.ApiVersion(new(1.0));
+            docSettings.SchemaSettings.AllowReferencesWithProperties = true;
+            docSettings.SchemaSettings.TypeMappers.Add(new NumberTypeMapper<PositiveInteger, int>());
+            docSettings.SchemaSettings.TypeMappers.Add(new NumberTypeMapper<NonNegativeInteger, int>());
+        };
+        options.SerializerSettings = optionsSerializerSettings;
+        options.AutoTagPathSegmentIndex = 0;
+    });
 
-            using IServiceScope scope = host.Services.CreateScope();
-            IServiceProvider services = scope.ServiceProvider;
-            ILogger<Program> logger = services.GetRequiredService<ILogger<Program>>();
-            IHostEnvironment hostingEnvironment = services.GetRequiredService<IHostEnvironment>();
+builder.Services.AddFastEndpoints(options => options.IncludeAbstractValidators = false)
+    .AddVersioning(options =>
+    {
+        options.DefaultApiVersion = new ApiVersion(1, 0);
+        options.AssumeDefaultVersionWhenUnspecified = true;
+        options.ReportApiVersions = true;
+        HeaderApiVersionReader optionsApiVersionReader = new HeaderApiVersionReader("api-version");
+        optionsApiVersionReader.VersionsByHeader();
+        optionsApiVersionReader.VersionsByMediaType();
+        options.ApiVersionReader = optionsApiVersionReader;
+        options.UnsupportedApiVersionStatusCode = Status400BadRequest;
+    });
 
-            logger?.LogInformation("Starting {ApplicationContext}", hostingEnvironment.ApplicationName);
+WebApplication app = builder.Build();
 
-            try
-            {
-                logger?.LogInformation("Upgrading {ApplicationContext}'s store", hostingEnvironment.ApplicationName);
+//app.UseSerilogRequestLogging(opts => opts.EnrichDiagnosticContext = (diagnosticContext, httpContext) => diagnosticContext.Set("CorrelationId", httpContext.TraceIdentifier));
+app.UseFastEndpoints(config =>
+{
+    config.Binding.ValueParserFor<DocumentId>(values => new ParseResult(DocumentId.TryParse(values.ToString(), CultureInfo.InvariantCulture, out DocumentId id), id));
+    config.Binding.ValueParserFor<NonNegativeLong>(values => new ParseResult(long.TryParse(values.ToString(), out long value)
+                                                                             && NonNegativeLong.MinValue <= value && value <= NonNegativeLong.MaxValue, NonNegativeLong.From(value)));
+    config.Binding.ValueParserFor<NonNegativeInteger>(values => new ParseResult(int.TryParse(values.ToString(), out int value)
+                                                                                && NonNegativeInteger.MinValue <= value && value <= NonNegativeInteger.MaxValue, NonNegativeInteger.From(value)));
+    config.Binding.ValueParserFor<PositiveInteger>(values => new ParseResult(int.TryParse(values.ToString(), out int value)
+                                                                             && PositiveInteger.MinValue <= value
+                                                                             && value <= PositiveInteger.MaxValue,
+        PositiveInteger.From(value)));
 
-                await host.InitAsync().ConfigureAwait(false);
+    config.Errors.UseProblemDetails(detailsConfig =>
+    {
+        detailsConfig.AllowDuplicateErrors = true;
+        detailsConfig.IndicateErrorCode = true;
+        detailsConfig.TypeTransformer = problemDetails => problemDetails.Status switch
+        {
+            Status200OK => "https://www.rfc-editor.org/rfc/rfc7231#section-6.3.1",
+            Status404NotFound => "https://www.rfc-editor.org/rfc/rfc7231#section-6.5.4",
+            Status409Conflict => "https://www.rfc-editor.org/rfc/rfc7231#section-6.5.8",
+            Status429TooManyRequests => "https://www.rfc-editor.org/rfc/rfc6585#section-4",
+            _ => "https://www.rfc-editor.org/rfc/rfc7231#section-6.5.1"
+        };
+    });
 
-                logger?.LogInformation("{ApplicationContext} store updated", hostingEnvironment.ApplicationName);
+    optionsSerializerSettings.Invoke(config.Serializer.Options);
+});
 
-                await host.RunAsync()
-                    .ConfigureAwait(false);
+app.UseOpenApi(opts => opts.Path = "/openapi/{documentName}.json");
+app.MapScalarApiReference(opts =>
+{
+    opts.AddDocuments(
+    [
+        new ScalarDocument("v1", "Documents API v1", IsDefault: true)
+    ]);
+    opts.ForceDarkMode();
+});
 
-                logger?.LogInformation("{AppllicationContext} started", hostingEnvironment.ApplicationName);
-            }
-            catch (Exception ex)
-            {
-                logger?.LogError(ex, "An error occurred on startup.");
-            }
-        }
+await app.RunAsync().ConfigureAwait(false);
 
-        /// <summary>
-        /// Builds the host
-        /// </summary>
-        /// <param name="args">command line arguments</param>
-        /// <returns></returns>
-        public static IHostBuilder CreateHostBuilder(string[] args)
-            => Host.CreateDefaultBuilder(args)
-                    .UseSerilog((hosting, loggerConfig) => loggerConfig
-                        .MinimumLevel.Verbose()
-                        .Enrich.WithProperty("ApplicationContext", hosting.HostingEnvironment.ApplicationName)
-                        .Enrich.FromLogContext()
-                        .Enrich.WithCorrelationIdHeader()
-                        .WriteTo.Console()
-                        .ReadFrom.Configuration(hosting.Configuration)
-                    )
-                .ConfigureWebHostDefaults(webHost => webHost.UseStartup<Startup>()
-                                                            .UseKestrel((hosting, options) => options.AddServerHeader = hosting.HostingEnvironment.IsDevelopment())
-                )
-                .ConfigureLogging((options) =>
-                {
-                    options.ClearProviders() // removes all default providers
-                        .AddSerilog()
-                        .AddConsole();
-                });
-    }
-}
+return;
+
+
+/// <summary>
+/// Application entry point
+/// </summary>
+public partial class Program;

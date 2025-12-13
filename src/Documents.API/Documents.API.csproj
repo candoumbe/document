@@ -1,30 +1,48 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <Import Project="..\..\..\..\core-api.props" />
+  <Import Project="..\..\core-api.props" />
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <UserSecretsId>e3d08f9a-1972-44cc-8157-898f488547da</UserSecretsId>
-    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\Documents.API.xml</DocumentationFile>
-    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-    <DockerfileContext>..\..\..\..</DockerfileContext>
+    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
   </PropertyGroup>
-
   <ItemGroup>
-    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.21.0" />
+    <PackageReference Include="Aspire.Npgsql.EntityFrameworkCore.PostgreSQL" />
+    <PackageReference Include="CorrelationId" />
+    <PackageReference Include="Candoumbe.Forms" />
+    <PackageReference Include="Candoumbe.Types.Numerics" />
+    <PackageReference Include="DataFilters.Expressions" />
+    <PackageReference Include="Destructurama.ByIgnoring" />
+    <PackageReference Include="EntityFrameworkCore.Sqlite.NodaTime" />
+    <PackageReference Include="FastEndpoints" />
+    <PackageReference Include="FastEndpoints.AspVersioning" />
+    <PackageReference Include="FastEndpoints.Swagger" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="NodaTime.Serialization.SystemTextJson" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.NodaTime" />
+    <PackageReference Include="Polly" />
+    <PackageReference Include="Scalar.AspNetCore"/>
+    <PackageReference Include="Serilog.AspNetCore" />
+    <PackageReference Include="Serilog.Sinks.Console" />
+    <PackageReference Include="Serilog.Sinks.Seq" />
+    <PackageReference Include="Serilog.Enrichers.CorrelationId" />
+    <PackageReference Include="Serilog.Settings.Configuration" />
+    <PackageReference Include="SystemTextJsonPatch" />
   </ItemGroup>
-
   <ItemGroup>
-    <ProjectReference Include="..\..\..\tools\MedEasy.Abstractions\MedEasy.Abstractions.csproj" />
-    <ProjectReference Include="..\..\..\tools\MedEasy.DAL.EFStore\MedEasy.DAL.EFStore.csproj" />
-    <ProjectReference Include="..\..\..\tools\MedEasy.DAL\MedEasy.DAL.csproj" />
-    <ProjectReference Include="..\..\..\tools\MedEasy.RestObjects\MedEasy.RestObjects.csproj" />
-    <ProjectReference Include="..\..\MedEasy.Core\MedEasy.Core.csproj" />
-    <ProjectReference Include="..\Documents.DataStores.Sqlite\Documents.DataStores.Sqlite.csproj" />
     <ProjectReference Include="..\Documents.DataStores\Documents.DataStores.csproj" />
-    <ProjectReference Include="..\Documents.DTO\Documents.DTO.csproj" />
-    <ProjectReference Include="..\Documents.CQRS\Documents.CQRS.csproj" />
-    <ProjectReference Include="..\Documents.Mapping\Documents.Mapping.csproj" />
+    <ProjectReference Include="..\Documents.DataStores.Sqlite\Documents.DataStores.Sqlite.csproj" />
+    <ProjectReference Include="..\Documents.DataStores.Postgres\Documents.DataStores.Postgres.csproj" />
+    <ProjectReference Include="..\Documents.ServiceDefaults\Documents.ServiceDefaults.csproj" />
   </ItemGroup>
 
 </Project>

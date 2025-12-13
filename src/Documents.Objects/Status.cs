@@ -1,18 +1,17 @@
-﻿namespace Documents.Objects
+﻿namespace Documents.Objects;
+
+/// <summary>
+/// Status of the documents in the Storage
+/// </summary>
+public enum Status
 {
     /// <summary>
-    /// Status of the documents in the Storage
+    /// <see cref="Status"/> of <see cref="Document"/>s which upload is ongoing
     /// </summary>
-    public enum Status
-    {
-        /// <summary>
-        /// <see cref="Status"/> of <see cref="Document"/>s which upload is ongoing
-        /// </summary>
-        Ongoing,
+    Ongoing,
 
-        /// <summary>
-        /// <see cref="Status"/> of <see cref="Document"/>s which upload is finished.
-        /// </summary>
-        Done
-    }
+    /// <summary>
+    /// <see cref="Status"/> of <see cref="Document"/>s which upload is finished.
+    /// </summary>
+    Done
 }
