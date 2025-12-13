@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Threading.Tasks;
+using AwesomeAssertions;
 using Bogus;
 using Candoumbe.DataAccess.Abstractions;
 using Candoumbe.DataAccess.EFStore;
@@ -13,7 +14,6 @@ using Documents.Ids;
 using Documents.Objects;
 using FakeItEasy;
 using FastEndpoints;
-using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Routing;

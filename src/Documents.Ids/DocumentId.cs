@@ -1,5 +1,4 @@
-﻿using System;
-using StronglyTypedIds;
+﻿using StronglyTypedIds;
 
 namespace Documents.Ids;
 

@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Aspire.Hosting.ApplicationModel;
 using Aspire.Hosting.Testing;
-using FluentAssertions.Extensions;
+using AwesomeAssertions.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
