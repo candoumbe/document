@@ -1,4 +1,3 @@
-using Asp.Versioning;
 using Microsoft.AspNetCore.OpenApi;
 using Microsoft.OpenApi;
 

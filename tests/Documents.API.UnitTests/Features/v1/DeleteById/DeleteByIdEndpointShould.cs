@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using AwesomeAssertions;
 using Candoumbe.DataAccess.Abstractions;
 using Candoumbe.DataAccess.EFStore;
 using Documents.API.Features.v1.Delete;
@@ -7,7 +8,6 @@ using Documents.DataStores;
 using Documents.Ids;
 using FakeItEasy;
 using FastEndpoints;
-using FluentAssertions;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using NodaTime;
