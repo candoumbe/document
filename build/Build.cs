@@ -43,6 +43,7 @@ using Project = Nuke.Common.ProjectModel.Project;
     ],
     OnPullRequestExcludePaths =
     [
+        ".github/ISSUE_TEMPLATE/*",
         "docs/*",
         "README.md",
         "CHANGELOG.md",
@@ -67,6 +68,7 @@ using Project = Nuke.Common.ProjectModel.Project;
     ],
     OnPullRequestExcludePaths =
     [
+        ".github/ISSUE_TEMPLATE/*",
         "docs/*",
         "README.md",
         "CHANGELOG.md",

@@ -22,6 +22,7 @@ on:
       - main
   pull_request:
     paths:
+      - '!.github/ISSUE_TEMPLATE/*'
       - '!docs/*'
       - '!README.md'
       - '!CHANGELOG.md'
