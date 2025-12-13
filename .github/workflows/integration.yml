@@ -49,42 +49,42 @@ jobs:
           CodecovToken: ${{ secrets.CODECOV_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: 'Publish: unit-tests'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: unit-tests
           path: output/artifacts/tests-results/unit-tests
       - name: 'Publish: integration-tests'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: integration-tests
           path: output/artifacts/tests-results/integration-tests
       - name: 'Publish: unit-test-coverage-report'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: unit-test-coverage-report
           path: output/artifacts/reports/coverage-report/unit-test-coverage-report
       - name: 'Publish: unit-test-coverage-history-report'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: unit-test-coverage-history-report
           path: output/artifacts/reports/coverage-history/unit-test-coverage-history-report
       - name: 'Publish: integration-test-coverage-report'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: integration-test-coverage-report
           path: output/artifacts/reports/coverage-report/integration-test-coverage-report
       - name: 'Publish: integration-test-coverage-history-report'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: integration-test-coverage-history-report
           path: output/artifacts/reports/coverage-history/integration-test-coverage-history-report
       - name: 'Publish: packages'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: packages
           path: output/artifacts/packages
       - name: 'Publish: publish'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: publish
           path: output/artifacts/publish
