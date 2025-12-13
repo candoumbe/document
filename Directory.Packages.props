@@ -78,7 +78,7 @@
     <PackageVersion Include="TngTech.ArchUnitNET.xUnitV3" Version="0.12.3" />
     <PackageVersion Include="xRetry.v3" Version="0.1.0-alpha2" />
     <PackageVersion Include="Xunit.DependencyInjection.Logging" Version="11.0.0" />
-    <PackageVersion Include="Xunit.OpenCategories.V3" Version="2.3.1.13" />
+    <PackageVersion Include="Xunit.OpenCategories.V3" Version="2.3.2.15" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.5" />
     <PackageVersion Include="xunit.v3" Version="3.1.0" />
   </ItemGroup>
