@@ -23,7 +23,7 @@
     <PackageVersion Include="coverlet.msbuild" Version="6.0.4" />
     <PackageVersion Include="DataFilters.Expressions" Version="0.13.2" />
     <PackageVersion Include="Destructurama.ByIgnoring" Version="4.0.1" />
-    <PackageVersion Include="EntityFrameworkCore.Sqlite.NodaTime" Version="9.2.1" />
+    <PackageVersion Include="EntityFrameworkCore.Sqlite.NodaTime" Version="10.0.0" />
     <PackageVersion Include="Extensions.Hosting.AsyncInitialization" Version="3.0.1" />
     <PackageVersion Include="FakeItEasy" Version="9.0.1" />
     <PackageVersion Include="FastEndpoints" Version="7.2.0" />
