@@ -20,7 +20,7 @@
     <PackageVersion Include="Candoumbe.Types.Numerics" Version="0.5.0" />
     <PackageVersion Include="CodecovUploader" Version="0.8.0" />
     <PackageVersion Include="CorrelationId" Version="3.0.1" />
-    <PackageVersion Include="coverlet.msbuild" Version="6.0.4" />
+    <PackageVersion Include="coverlet.msbuild" Version="8.0.0" />
     <PackageVersion Include="DataFilters.Expressions" Version="0.13.2" />
     <PackageVersion Include="Destructurama.ByIgnoring" Version="4.0.1" />
     <PackageVersion Include="EntityFrameworkCore.Sqlite.NodaTime" Version="10.0.0" />
