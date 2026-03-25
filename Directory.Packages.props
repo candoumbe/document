@@ -26,9 +26,9 @@
     <PackageVersion Include="EntityFrameworkCore.Sqlite.NodaTime" Version="10.0.0" />
     <PackageVersion Include="Extensions.Hosting.AsyncInitialization" Version="3.0.1" />
     <PackageVersion Include="FakeItEasy" Version="9.0.1" />
-    <PackageVersion Include="FastEndpoints" Version="8.0.1" />
-    <PackageVersion Include="FastEndpoints.AspVersioning" Version="8.0.1" />
-    <PackageVersion Include="FastEndpoints.Swagger" Version="8.0.1" />
+    <PackageVersion Include="FastEndpoints" Version="8.1.0" />
+    <PackageVersion Include="FastEndpoints.AspVersioning" Version="8.1.0" />
+    <PackageVersion Include="FastEndpoints.Swagger" Version="8.1.0" />
     <PackageVersion Include="FluentAssertions.Nodatime" Version="2.0.1" />
     <PackageVersion Include="FsCheck.Xunit.v3" Version="3.3.2" />
     <PackageVersion Include="JetBrains.Annotations" Version="2025.2.4" />
