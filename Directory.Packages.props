@@ -73,7 +73,7 @@
     <PackageVersion Include="StronglyTypedId" Version="1.0.0-beta08" PrivateAssets="all" ExcludeAssets="runtime" />
     <PackageVersion Include="StronglyTypedId.Templates" Version="1.0.0-beta08" PrivateAssets="all" ExcludeAssets="runtime;compile" />
     <PackageVersion Include="System.Text.Json" Version="10.0.5" />
-    <PackageVersion Include="SystemTextJsonPatch" Version="4.2.0" />
+    <PackageVersion Include="SystemTextJsonPatch" Version="5.0.0" />
     <PackageVersion Include="TestContainers.PostgreSql" Version="4.11.0" />
     <PackageVersion Include="TngTech.ArchUnitNET.xUnitV3" Version="0.13.3" />
     <PackageVersion Include="xRetry.v3" Version="1.0.0-rc3" />
