@@ -16,7 +16,7 @@
     <PackageVersion Include="Candoumbe.DataAccess.Abstractions" Version="0.1.0-beta.356" />
     <PackageVersion Include="Candoumbe.DataAccess.EFStore" Version="0.1.0-beta.356" />
     <PackageVersion Include="Candoumbe.Forms" Version="0.3.0" />
-    <PackageVersion Include="Candoumbe.Pipelines" Version="2.0.0" />
+    <PackageVersion Include="Candoumbe.Pipelines" Version="2.0.1" />
     <PackageVersion Include="Candoumbe.Types.Numerics" Version="0.5.0" />
     <PackageVersion Include="CodecovUploader" Version="0.8.0" />
     <PackageVersion Include="CorrelationId" Version="3.0.1" />
