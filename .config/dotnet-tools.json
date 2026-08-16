@@ -2,10 +2,17 @@
   "version": 1,
   "isRoot": true,
   "tools": {
-    "nuke.globaltool": {
-      "version": "10.1.0",
+    "fallout.migrate": {
+      "version": "10.3.49",
       "commands": [
-        "nuke"
+        "fallout-migrate"
+      ],
+      "rollForward": false
+    },
+    "fallout.globaltool": {
+      "version": "10.3.49",
+      "commands": [
+        "fallout"
       ],
       "rollForward": false
     },

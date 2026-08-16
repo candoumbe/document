@@ -16,8 +16,12 @@
     <PackageVersion Include="Candoumbe.DataAccess.Abstractions" Version="0.1.0-beta.356" />
     <PackageVersion Include="Candoumbe.DataAccess.EFStore" Version="0.1.0-beta.356" />
     <PackageVersion Include="Candoumbe.Forms" Version="0.3.0" />
-    <PackageVersion Include="Candoumbe.Pipelines" Version="2.0.0" />
+    <PackageVersion Include="Candoumbe.Pipelines" Version="3.0.1" />
     <PackageVersion Include="Candoumbe.Types.Numerics" Version="0.5.0" />
+    <PackageVersion Include="Microsoft.Build" Version="18.8.2" />
+    <PackageVersion Include="Microsoft.Build.Tasks.Core" Version="18.8.2" />
+    <PackageVersion Include="Microsoft.Build.Utilities.Core" Version="18.8.2" />
+    <PackageVersion Include="NuGet.Packaging" Version="7.6.0" />
     <PackageVersion Include="CodecovUploader" Version="0.8.0" />
     <PackageVersion Include="CorrelationId" Version="3.0.1" />
     <PackageVersion Include="coverlet.msbuild" Version="10.0.1" />
@@ -64,6 +68,7 @@
     <PackageVersion Include="Scalar.AspNetCore" Version="2.16.20" />
     <PackageVersion Include="Serialize.Linq" Version="4.4.1" />
     <PackageVersion Include="ReportGenerator" Version="5.5.11" />
+    <PackageVersion Include="System.Security.Cryptography.Xml" Version="10.0.10" />
     <PackageVersion Include="Roslynator.Analyzers" Version="4.16.1" />
     <PackageVersion Include="Serilog.AspNetCore" Version="10.0.0" />
     <PackageVersion Include="Serilog.Enrichers.CorrelationId" Version="3.0.1" />
