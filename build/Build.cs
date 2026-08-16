@@ -342,7 +342,6 @@ public class Build : EnhancedBuild,
                        completeOnFailure: false);
         });
 
-
     private AbsolutePath ApiProject => this.Get<IHaveSourceDirectory>().SourceDirectory / "Documents.API";
 
     internal IReadOnlyList<RegistryConfiguration> Registries =>
