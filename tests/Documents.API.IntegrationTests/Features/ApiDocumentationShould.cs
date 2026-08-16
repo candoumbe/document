@@ -1,0 +1,49 @@
+using System.Net;
+using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
+using Documents.API.IntegrationTests.Fixtures;
+using Xunit;
+using Xunit.OpenCategories.V3;
+
+namespace Documents.API.IntegrationTests.Features;
+
+[IntegrationTest]
+public sealed class ApiDocumentationShould(ITestOutputHelper outputHelper) : IAsyncLifetime
+{
+    private DocumentApplicationTestingBuilder _appHost;
+    private HttpClient _client;
+
+    public async ValueTask InitializeAsync()
+    {
+        _appHost = await DistributedApplicationTestingBuilderFactory.CreateBuilderAsync(outputHelper);
+        await _appHost.StartAsync(TestContext.Current.CancellationToken);
+        _client = _appHost.ApiClient;
+    }
+
+    public async ValueTask DisposeAsync() => await _appHost.DisposeAsync();
+
+    [Fact]
+    public async Task Exposes_scalar_and_openapi_without_swagger_ui()
+    {
+        CancellationToken cancellationToken = TestContext.Current.CancellationToken;
+        using HttpResponseMessage scalarResponse = await _client.GetAsync("/scalar/v1", cancellationToken);
+        using HttpResponseMessage openApiResponse = await _client.GetAsync("/openapi/v1.json", cancellationToken);
+        using HttpResponseMessage swaggerResponse = await _client.GetAsync("/swagger/index.html", cancellationToken);
+
+        Assert.Equal(HttpStatusCode.OK, scalarResponse.StatusCode);
+        Assert.Equal(HttpStatusCode.OK, openApiResponse.StatusCode);
+        Assert.Equal("application/json", openApiResponse.Content.Headers.ContentType?.MediaType);
+        Assert.Equal(HttpStatusCode.NotFound, swaggerResponse.StatusCode);
+    }
+
+    [Fact]
+    public async Task Redirects_scalar_trailing_slash_to_canonical_asset_path()
+    {
+        using HttpRequestMessage request = new(HttpMethod.Get, "/scalar/v1/");
+        using HttpResponseMessage response = await _client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, TestContext.Current.CancellationToken);
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.Equal("/scalar/", response.RequestMessage?.RequestUri?.AbsolutePath);
+    }
+}
