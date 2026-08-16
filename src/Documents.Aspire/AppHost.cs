@@ -1,3 +1,4 @@
+using Documents.Aspire;
 using Microsoft.Extensions.Configuration;
 using Projects;
 
@@ -10,16 +11,22 @@ bool isRunningIntegrationTests = builder.Configuration.GetValue(RunningIntegrati
 
 if (! isRunningIntegrationTests)
 {
+    PinnedContainerImage postgresImage = ContainerImages.Postgres;
     postgres = postgres
-        .WithPgAdmin(containerName: "pg-admin")
-        .WithPgWeb(containerName: "pg-web");
+        .WithPgAdmin(configureContainer: pgAdmin => pgAdmin.WithImage(postgresImage.Image, postgresImage.Tag),
+                     containerName: "pg-admin")
+        .WithPgWeb(configureContainer: pgWeb => pgWeb.WithImage(ContainerImages.PgAdmin.Image, ContainerImages.PgAdmin.Tag),
+                   containerName: "pg-web");
 }
 var migrationService = builder.AddProject<Documents_Migrator>("migrations")
-    .WithReference(postgres)
-    .WaitFor(postgres);
+    .WithReference(postgres).WaitFor(postgres);
 
 var api = builder.AddProject<Documents_API>("api")
-    .WithReference(postgres)
+    .WithHttpHealthCheck("/health", endpointName:"http")
+    .WithExternalHttpEndpoints()
+    // Containerised runs receive no environment name and silently fall back to Production.
+    .WithEnvironment("ASPNETCORE_ENVIRONMENT", builder.Environment.EnvironmentName)
+    .WithReference(postgres).WaitFor(postgres)
     .WaitForCompletion(migrationService);
 
 
