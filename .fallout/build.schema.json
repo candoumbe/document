@@ -38,6 +38,7 @@
         "Hotfix",
         "IntegrationTests",
         "Pack",
+        "PrePullImages",
         "Publish",
         "PublishApi",
         "RegenerateWorkflow",
