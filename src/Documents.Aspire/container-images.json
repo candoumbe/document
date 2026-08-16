@@ -1,0 +1,25 @@
+{
+  "$schema": "./container-images.schema.json",
+  "images": {
+    "postgres": {
+      "registry": "docker.io",
+      "image": "library/postgres",
+      "tag": "18-alpine"
+    },
+    "rabbitmq": {
+      "registry": "docker.io",
+      "image": "library/rabbitmq",
+      "tag": "4.3-management"
+    },
+    "keycloak": {
+      "registry": "quay.io",
+      "image": "keycloak/keycloak",
+      "tag": "26.7"
+    },
+    "pgadmin": {
+      "registry": "docker.io",
+      "image": "dpage/pgadmin4",
+      "tag": "9.16"
+    }
+  }
+}
