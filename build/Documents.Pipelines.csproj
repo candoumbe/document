@@ -5,16 +5,22 @@
     <TargetFramework>net10.0</TargetFramework>
     <RootNamespace></RootNamespace>
     <NoWarn>CS0649;CS0169;CA1050;CA1822;CA2211;IDE1006</NoWarn>
-    <NukeRootDirectory>..</NukeRootDirectory>
-    <NukeScriptDirectory>..</NukeScriptDirectory>
-    <NukeTelemetryVersion>1</NukeTelemetryVersion>
+    <FalloutRootDirectory>..</FalloutRootDirectory>
+    <FalloutScriptDirectory>..</FalloutScriptDirectory>
+    <FalloutTelemetryVersion>1</FalloutTelemetryVersion>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="candoumbe.pipelines" />
+    <PackageReference Include="Candoumbe.Pipelines" />
+    <PackageReference Include="Candoumbe.Types.Numerics" />
     <PackageReference Include="ReportGenerator" />
     <PackageReference Include="CodecovUploader" />
+    <PackageReference Include="Microsoft.Build" />
+    <PackageReference Include="Microsoft.Build.Tasks.Core" />
+    <PackageReference Include="Microsoft.Build.Utilities.Core" />
+    <PackageReference Include="NuGet.Packaging" />
+    <PackageReference Include="System.Security.Cryptography.Xml" />
     <PackageDownload Include="GitVersion.Tool" Version="[6.1.0]" />
     <PackageDownload Include="dotnet-stryker" Version="[4.8.1]" />
     <PackageDownload Include="dotnet-ef" Version="[10.0.0]" />

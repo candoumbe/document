@@ -6,24 +6,24 @@ using Candoumbe.Pipelines.Components.Formatting;
 using Candoumbe.Pipelines.Components.GitHub;
 using Candoumbe.Pipelines.Components.NuGet;
 using Candoumbe.Pipelines.Components.Workflows;
-using Nuke.Common;
-using Nuke.Common.CI.GitHubActions;
-using Nuke.Common.Git;
-using Nuke.Common.IO;
-using Nuke.Common.ProjectModel;
-using Nuke.Common.Tooling;
-using Nuke.Common.Tools.Codecov;
-using Nuke.Common.Tools.Docker;
-using Nuke.Common.Tools.DotNet;
-using Nuke.Common.Tools.EntityFramework;
-using Nuke.Common.Tools.GitHub;
-using Nuke.Common.Tools.GitVersion;
-using static Nuke.Common.Tools.Docker.DockerTasks;
-using static Nuke.Common.Tools.DotNet.DotNetTasks;
-using static Nuke.Common.Tools.EntityFramework.EntityFrameworkTasks;
-using static Nuke.Common.Utilities.ConsoleUtility;
+using Fallout.Common;
+using Fallout.Common.CI.GitHubActions;
+using Fallout.Common.Git;
+using Fallout.Common.IO;
+using Fallout.Common.ProjectModel;
+using Fallout.Common.Tooling;
+using Fallout.Common.Tools.Codecov;
+using Fallout.Common.Tools.Docker;
+using Fallout.Common.Tools.DotNet;
+using Fallout.Common.Tools.EntityFramework;
+using Fallout.Common.Tools.GitHub;
+using Fallout.Common.Tools.GitVersion;
+using static Fallout.Common.Tools.Docker.DockerTasks;
+using static Fallout.Common.Tools.DotNet.DotNetTasks;
+using static Fallout.Common.Tools.EntityFramework.EntityFrameworkTasks;
+using static Fallout.Common.Utilities.ConsoleUtility;
 using static Serilog.Log;
-using Project = Nuke.Common.ProjectModel.Project;
+using Project = Fallout.Common.ProjectModel.Project;
 
 [GitHubActions(
     "integration",
@@ -39,9 +39,9 @@ using Project = Nuke.Common.ProjectModel.Project;
     [
         nameof(IPushNugetPackages.NuGetApiKey),
         nameof(IReportCoverage.CodecovToken),
-        // nameof(IMutationTest.StrykerDashboardApiKey)
+        nameof(IMutationTest.StrykerDashboardApiKey)
     ],
-    OnPullRequestExcludePaths =
+    OnPushExcludePaths =
     [
         ".github/ISSUE_TEMPLATE/*",
         "docs/*",
@@ -66,7 +66,7 @@ using Project = Nuke.Common.ProjectModel.Project;
         nameof(IReportCoverage.CodecovToken),
         nameof(IMutationTest.StrykerDashboardApiKey)
     ],
-    OnPullRequestExcludePaths =
+    OnPushExcludePaths =
     [
         ".github/ISSUE_TEMPLATE/*",
         "docs/*",
@@ -76,7 +76,7 @@ using Project = Nuke.Common.ProjectModel.Project;
     ]
 )]
 [DotNetVerbosityMapping]
-public class Build : EnhancedNukeBuild,
+public class Build : EnhancedBuild,
     IHaveGitVersion,
     IHaveSourceDirectory,
     IHaveTestDirectory,
@@ -186,7 +186,7 @@ public class Build : EnhancedNukeBuild,
                                                                          .SetNoBuild(SucceededTargets.Contains(this.Get<ICompile>().Compile))
                                                                          .SetNoRestore(SucceededTargets.Contains(this.Get<IRestore>().Restore))
                                                                          .CombineWith(ArchitecturalTestsProjects,
-                                                                                      (setting, project) => setting.SetProjectFile(project)
+                                                                                      (setting, project) => setting.SetProcessAdditionalArguments($"--project {project.Path}")
                                                                                           .CombineWith(project.GetTargetFrameworks(),
                                                                                                        (x, framework) => x.SetFramework(framework)))
                                                                     )
