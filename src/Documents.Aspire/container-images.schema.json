@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agenda.candoumbe.dev/schemas/container-images.schema.json",
+  "title": "Agenda container images manifest",
+  "description": "Pinned container image references shared between the Aspire AppHost and the build pipeline. This file is the single source of truth: every image used by the AppHost MUST be declared here, and every entry MUST be referenced by the AppHost. Renovate watches this file to bump tags.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["images"],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "images": {
+      "type": "object",
+      "description": "Map of logical image keys (used by the AppHost code) to their pinned reference.",
+      "minProperties": 1,
+      "additionalProperties": {
+        "$ref": "#/$defs/imageReference"
+      }
+    }
+  },
+  "$defs": {
+    "imageReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["registry", "image", "tag"],
+      "properties": {
+        "registry": {
+          "type": "string",
+          "description": "Registry hostname, e.g. 'docker.io' or 'quay.io'.",
+          "pattern": "^[a-z0-9.-]+(:[0-9]+)?$",
+          "minLength": 1
+        },
+        "image": {
+          "type": "string",
+          "description": "Image repository as accepted by Aspire's WithImage(...) — without registry and without tag.",
+          "pattern": "^[a-z0-9][a-z0-9._/-]*$",
+          "minLength": 1
+        },
+        "tag": {
+          "type": "string",
+          "description": "Pinned tag. MUST NOT be 'latest' or empty so Renovate can compare versions.",
+          "pattern": "^(?!latest$)[A-Za-z0-9][A-Za-z0-9._-]*$",
+          "minLength": 1
+        }
+      }
+    }
+  }
+}
