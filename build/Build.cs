@@ -121,6 +121,20 @@ public class Build : EnhancedBuild,
     IEnumerable<Project> IIntegrationTest.IntegrationTestsProjects => this.Get<IHaveSolution>().Solution.GetAllProjects("*.IntegrationTests");
 
     ///<inheritdoc/>
+    Configure<DotNetTestSettings, (Project project, string framework)> IUnitTest.ProjectUnitTestSettings => (settings, unitTestRunContext) => settings
+        .ResetProjectFile()
+        .ClearLoggers()
+        .SetProcessAdditionalArguments($"--project {unitTestRunContext.project.Path}");
+
+    ///<inheritdoc/>
+    Configure<DotNetTestSettings, (Project project, string framework)> IIntegrationTest.ProjectIntegrationTestSettings => (settings, testRunContext) => settings
+        .ResetProjectFile()
+        .ClearLoggers()
+        .SetProcessAdditionalArguments($"--project {testRunContext.project.Path}");
+
+
+
+    ///<inheritdoc/>
     IEnumerable<Project> IBenchmark.BenchmarkProjects => this.Get<IHaveSolution>().Solution.GetAllProjects("*.PerformanceTests");
 
     ///<inheritdoc/>
