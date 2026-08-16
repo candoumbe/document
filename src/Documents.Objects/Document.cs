@@ -81,7 +81,7 @@ public class Document : AuditableEntity<DocumentId, Document>
     /// Checks if the current instance holds same <see cref="Document"/> as <paramref name="other"/>
     /// </summary>
     /// <param name="other"></param>
-    /// <returns><c>true</c> if <see cref="other"/> has same content as the current instance
+    /// <returns><c>true</c> if <paramref name="other"/> has same content as the current instance
     /// and <c>false</c> otherwise</returns>
     public bool IsEquivalentTo(Document other) => Hash.Equals(other.Hash);
 
