@@ -27,7 +27,7 @@ using Xunit.OpenCategories.V3;
 
 namespace Documents.API.IntegrationTests.Features.v1.Create;
 
-[IntegrationTests]
+[IntegrationTest]
 [Feature(nameof(Documents))]
 public class CreateDocumentEndpointShould(ITestOutputHelper outputHelper) : IAsyncLifetime
 {
