@@ -50,7 +50,9 @@ builder.AddNpgsqlDbContext<DocumentsStore>("postgres",
             .MigrationsAssembly("Documents.DataStores.Postgres"));
     });
 builder.Services.AddDataStores();
-builder.Services.AddSerilog();
+builder.Services.AddSerilog((serviceProvider, loggerConfiguration) => loggerConfiguration
+    .ReadFrom.Configuration(builder.Configuration)
+    .ReadFrom.Services(serviceProvider));
 builder.Services.Configure<JsonOptions>(c => optionsSerializerSettings.Invoke(c.SerializerOptions));
 builder.Services
     .SwaggerDocument(options =>
@@ -123,6 +125,10 @@ app.MapScalarApiReference(opts =>
     ]);
     opts.ForceDarkMode();
 });
+
+app.MapGet("/scalar/{documentName}/{**asset}", (string asset) => Results.LocalRedirect($"/scalar/{asset}"))
+   .AllowAnonymous()
+   .ExcludeFromDescription();
 
 await app.RunAsync().ConfigureAwait(false);
 
