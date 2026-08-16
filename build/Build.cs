@@ -6,6 +6,7 @@ using Candoumbe.Pipelines.Components.Formatting;
 using Candoumbe.Pipelines.Components.GitHub;
 using Candoumbe.Pipelines.Components.NuGet;
 using Candoumbe.Pipelines.Components.Workflows;
+using Documents.Aspire;
 using Fallout.Common;
 using Fallout.Common.CI.GitHubActions;
 using Fallout.Common.Git;
@@ -320,6 +321,25 @@ public class Build : EnhancedBuild,
             Information("Latest migration removed successfully.");
 
 
+        });
+
+
+    /// <summary>
+    /// Pre-pulls every container image declared in <see cref="ContainerImages"/> so the download
+    /// cost is paid before the integration test fixture starts the AppHost. This keeps cold CI
+    /// runs from exhausting the AppHost startup timeout while pulling Postgres/RabbitMQ/Keycloak.
+    /// </summary>
+    public Target PrePullImages => _ => _
+        .Description("Pulls Docker images required by integration tests so the pull time does not count against the AppHost startup timeout.")
+        .TryDependentFor<IIntegrationTest>()
+        .Executes(() =>
+        {
+            string[] references = [.. ContainerImages.All.Values.Select(image => image.FullReference)];
+            DockerPull(settings => settings
+                           .CombineWith(references,
+                                        (s, image) => s.SetName(image)),
+                       degreeOfParallelism: references.Length,
+                       completeOnFailure: false);
         });
 
 
