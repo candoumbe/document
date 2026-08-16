@@ -33,7 +33,11 @@ public static partial class ContainerImages
     public const string PgAdminKey = "pgadmin";
 
     /// <summary>Manifest resource name relative to the assembly (logical name).</summary>
-    public const string ManifestResourceName = "Documents.AppHost.container-images.json";
+    /// <remarks>
+    /// Both <c>Documents.Aspire.csproj</c> and <c>build/Documents.Pipelines.csproj</c> embed the manifest
+    /// under this exact <c>LogicalName</c>, so a single lookup works from either assembly.
+    /// </remarks>
+    public const string ManifestResourceName = "Documents.Aspire.container-images.json";
 
     private static readonly IReadOnlyDictionary<string, PinnedContainerImage> s_images = LoadFromAssembly(typeof(ContainerImages).Assembly);
 

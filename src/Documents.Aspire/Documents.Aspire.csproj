@@ -14,6 +14,11 @@
     <PackageReference Include="Aspire.Hosting.PostgreSQL"/>
   </ItemGroup>
 
+  <!-- Same logical name as in build/Documents.Pipelines.csproj: ContainerImages resolves it by that name in both assemblies. -->
+  <ItemGroup>
+    <EmbeddedResource Include="container-images.json" LogicalName="Documents.Aspire.container-images.json" />
+  </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\Documents.API\Documents.API.csproj" />
     <ProjectReference Include="..\Documents.Migrator\Documents.Migrator.csproj" />

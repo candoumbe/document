@@ -1,3 +1,6 @@
+// Explicit using: this file is also compiled into build/Documents.Pipelines.csproj, which has no implicit usings.
+using System;
+
 namespace Documents.Aspire;
 
 /// <summary>
