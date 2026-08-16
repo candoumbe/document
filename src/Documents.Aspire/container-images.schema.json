@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://agenda.candoumbe.dev/schemas/container-images.schema.json",
-  "title": "Agenda container images manifest",
+  "$id": "https://documents.candoumbe.dev/schemas/container-images.schema.json",
+  "title": "Documents container images manifest",
   "description": "Pinned container image references shared between the Aspire AppHost and the build pipeline. This file is the single source of truth: every image used by the AppHost MUST be declared here, and every entry MUST be referenced by the AppHost. Renovate watches this file to bump tags.",
   "type": "object",
   "additionalProperties": false,
