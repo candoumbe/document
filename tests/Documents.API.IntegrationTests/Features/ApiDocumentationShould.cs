@@ -9,19 +9,18 @@ using Xunit.OpenCategories.V3;
 namespace Documents.API.IntegrationTests.Features;
 
 [IntegrationTest]
-public sealed class ApiDocumentationShould(ITestOutputHelper outputHelper) : IAsyncLifetime
+public sealed class ApiDocumentationShould : IAsyncLifetime
 {
-    private DocumentApplicationTestingBuilder _appHost;
+    private readonly DocumentApplicationFixture _fixture = new();
     private HttpClient _client;
 
     public async ValueTask InitializeAsync()
     {
-        _appHost = await DistributedApplicationTestingBuilderFactory.CreateBuilderAsync(outputHelper);
-        await _appHost.StartAsync(TestContext.Current.CancellationToken);
-        _client = _appHost.ApiClient;
+        await _fixture.InitializeAsync();
+        _client = _fixture.ApiClient;
     }
 
-    public async ValueTask DisposeAsync() => await _appHost.DisposeAsync();
+    public async ValueTask DisposeAsync() => await _fixture.DisposeAsync();
 
     [Fact]
     public async Task Exposes_scalar_and_openapi_without_swagger_ui()
