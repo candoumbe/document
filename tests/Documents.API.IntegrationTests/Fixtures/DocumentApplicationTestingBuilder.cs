@@ -187,3 +187,4 @@ public class DocumentApplicationTestingBuilder : IAsyncLifetime
 
         throw new TimeoutException("The API endpoint did not become reachable before the startup timeout elapsed.", lastException);
     }
+}
