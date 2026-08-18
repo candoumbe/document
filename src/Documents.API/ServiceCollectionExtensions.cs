@@ -78,6 +78,7 @@ public static class ServiceCollectionExtensions
         {
             services.AddSingleton<IClock>(SystemClock.Instance);
             services.AddHttpContextAccessor();
+            services.AddSingleton<IDocumentContentStorage, MinioDocumentContentStorage>();
         }
     }
 }
