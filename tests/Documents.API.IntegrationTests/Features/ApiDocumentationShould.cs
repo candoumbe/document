@@ -36,13 +36,14 @@ public sealed class ApiDocumentationShould : IAsyncLifetime
         Assert.Equal(HttpStatusCode.NotFound, swaggerResponse.StatusCode);
     }
 
+    // Scalar emits relative asset URLs, so browsing "/scalar/v1/" resolves them one segment too deep.
     [Fact]
-    public async Task Redirects_scalar_trailing_slash_to_canonical_asset_path()
+    public async Task Redirects_scalar_versioned_asset_to_canonical_asset_path()
     {
-        using HttpRequestMessage request = new(HttpMethod.Get, "/scalar/v1/");
+        using HttpRequestMessage request = new(HttpMethod.Get, "/scalar/v1/scalar.js");
         using HttpResponseMessage response = await _client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        Assert.Equal("/scalar/", response.RequestMessage?.RequestUri?.AbsolutePath);
+        Assert.Equal("/scalar/scalar.js", response.RequestMessage?.RequestUri?.AbsolutePath);
     }
 }
