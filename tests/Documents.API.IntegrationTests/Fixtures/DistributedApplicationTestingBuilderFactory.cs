@@ -1,3 +1,5 @@
+extern alias AspireHost;
+
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -8,7 +10,6 @@ using AwesomeAssertions.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Projects;
 using Xunit;
 
 namespace Documents.API.IntegrationTests.Fixtures;
@@ -37,10 +38,12 @@ public static class DistributedApplicationTestingBuilderFactory
     /// <returns></returns>
     public static async Task<DocumentApplicationTestingBuilder> CreateBuilderAsync(ITestOutputHelper outputHelper = null, CancellationToken cancellationToken = default)
     {
-        IDistributedApplicationTestingBuilder builder = await DistributedApplicationTestingBuilder.CreateAsync<Documents_Aspire>(cancellationToken);
+        // The AppHost reads the flag while it is being built, so it must be visible before CreateAsync.
+        Environment.SetEnvironmentVariable(AspireHost::Program.RunningIntegrationTestsConfigName, bool.TrueString);
 
+        IDistributedApplicationTestingBuilder builder = await DistributedApplicationTestingBuilder.CreateAsync<AspireHost::Projects.Documents_Aspire>(cancellationToken);
 
-        builder.Configuration.AddInMemoryCollection([new KeyValuePair<string, string>("RunningIntegrationTests", bool.TrueString)]);
+        builder.Configuration.AddInMemoryCollection([new KeyValuePair<string, string>(AspireHost::Program.RunningIntegrationTestsConfigName, bool.TrueString)]);
         builder.WithRandomParameterValues();
         builder.WithRandomVolumeNames();
         // Containers should be re-created for each test.
