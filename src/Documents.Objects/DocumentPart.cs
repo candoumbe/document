@@ -9,9 +9,9 @@ namespace Documents.Objects;
 public class DocumentPart
 {
     /// <summary>
-    /// Binary content of the document part
+    /// Object key of the document part in the dedicated file storage.
     /// </summary>
-    public byte[] Content { get; }
+    public string ObjectKey { get; }
 
     /// <summary>
     /// Position of the content amongst its siblings
@@ -33,17 +33,23 @@ public class DocumentPart
     /// </summary>
     /// <param name="documentId">id of the <see cref="Document"/> which this content is attached to</param>
     /// <param name="position">O-based index of the position of the current instance amongst all other<see cref="DocumentPart"/>s for a same <see cref="Document"/>.</param>
-    /// <param name="content">Binary content</param>
-    public DocumentPart(DocumentId documentId, int position, byte[] content)
+    /// <param name="objectKey">Object key in the dedicated file storage</param>
+    /// <param name="size">Size of the stored content in bytes</param>
+    public DocumentPart(DocumentId documentId, int position, string objectKey, long size)
     {
-        if (content == default)
+        if (objectKey is null)
         {
-            throw new ArgumentNullException(nameof(content));
+            throw new ArgumentNullException(nameof(objectKey));
         }
 
-        if (content.Length == 0)
+        if (string.IsNullOrWhiteSpace(objectKey))
         {
-            throw new ArgumentOutOfRangeException(nameof(content), $"{nameof(content)} cannot be empty");
+            throw new ArgumentException($"{nameof(objectKey)} cannot be empty", nameof(objectKey));
+        }
+
+        if (size <= 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(size), size, $"{nameof(size)} must be greater than zero");
         }
 
         if (position < 0)
@@ -57,8 +63,8 @@ public class DocumentPart
         }
 
         DocumentId = documentId;
-        Content = content;
+        ObjectKey = objectKey;
         Position = position;
-        Size = content.Length;
+        Size = size;
     }
 }

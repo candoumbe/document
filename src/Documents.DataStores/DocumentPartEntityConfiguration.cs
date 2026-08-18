@@ -14,7 +14,11 @@ public class DocumentPartEntityConfiguration : IEntityTypeConfiguration<Document
     {
         builder.HasKey(x => new { x.DocumentId, x.Position });
 
-        builder.Property(x => x.Content)
+        builder.Property(x => x.ObjectKey)
+            .HasMaxLength(512)
+            .IsRequired();
+
+        builder.Property(x => x.Size)
             .IsRequired();
     }
 }
