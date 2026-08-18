@@ -3,20 +3,18 @@ using Microsoft.Extensions.Configuration;
 using Projects;
 
 IDistributedApplicationBuilder builder = DistributedApplication.CreateBuilder(args);
+PinnedContainerImage postgresImage = ContainerImages.Postgres;
 var postgres = builder.AddPostgres("postgres")
-    .WithImage("postgres:17-alpine");
+    .WithImage(postgresImage.Image, postgresImage.Tag);
 
 
 bool isRunningIntegrationTests = builder.Configuration.GetValue(RunningIntegrationTestsConfigName, false);
 
 if (! isRunningIntegrationTests)
 {
-    PinnedContainerImage postgresImage = ContainerImages.Postgres;
     postgres = postgres
-        .WithPgAdmin(configureContainer: pgAdmin => pgAdmin.WithImage(postgresImage.Image, postgresImage.Tag),
-                     containerName: "pg-admin")
-        .WithPgWeb(configureContainer: pgWeb => pgWeb.WithImage(ContainerImages.PgAdmin.Image, ContainerImages.PgAdmin.Tag),
-                   containerName: "pg-web");
+        .WithPgAdmin(configureContainer: pgAdmin => pgAdmin.WithImage(ContainerImages.PgAdmin.Image, ContainerImages.PgAdmin.Tag),
+                     containerName: "pg-admin");
 }
 var migrationService = builder.AddProject<Documents_Migrator>("migrations")
     .WithReference(postgres).WaitFor(postgres);
