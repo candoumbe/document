@@ -13,7 +13,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Documents.API\Documents.API.csproj" />
-    <ProjectReference Include="..\..\src\Documents.Aspire\Documents.Aspire.csproj" />
+    <!-- Aliased because both Documents.API and Documents.Aspire expose a global `Program` type. -->
+    <ProjectReference Include="..\..\src\Documents.Aspire\Documents.Aspire.csproj" Aliases="AspireHost" />
   </ItemGroup>
 
 </Project>
