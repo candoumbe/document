@@ -41,6 +41,7 @@
         "PrePullImages",
         "Publish",
         "PublishApi",
+        "PublishWorker",
         "RegenerateWorkflow",
         "Release",
         "RemoveMigration",
