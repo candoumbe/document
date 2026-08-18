@@ -1,7 +1,9 @@
 using System.Security.Cryptography;
+using System.IO;
 using Candoumbe.DataAccess.Abstractions;
 using Candoumbe.Forms;
 using Candoumbe.Types.Numerics;
+using Documents.DataStores;
 using Documents.API.Features.v1.GetById;
 using Documents.Ids;
 using Documents.Objects;
@@ -18,16 +20,19 @@ namespace Documents.API.Features.v1.Create
     {
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly LinkGenerator _linkGenerator;
+        private readonly IDocumentContentStorage _contentStorage;
 
         /// <summary>
         /// Builds a new <see cref="CreateDocumentEndpoint"/> instance.
         /// </summary>
         /// <param name="unitOfWorkFactory"></param>
         /// <param name="linkGenerator"></param>
-        public CreateDocumentEndpoint(IUnitOfWorkFactory unitOfWorkFactory, LinkGenerator linkGenerator)
+        /// <param name="contentStorage"></param>
+        public CreateDocumentEndpoint(IUnitOfWorkFactory unitOfWorkFactory, LinkGenerator linkGenerator, IDocumentContentStorage contentStorage)
         {
             _unitOfWorkFactory = unitOfWorkFactory;
             _linkGenerator = linkGenerator;
+            _contentStorage = contentStorage;
         }
 
         /// <inheritdoc />
@@ -53,14 +58,24 @@ namespace Documents.API.Features.v1.Create
                 document.ChangeMimeTypeTo(req.MimeType);
             }
 
-            await uow.Repository<Document>().Create(document, ct);
-            await uow.Repository<DocumentPart>().Create(new DocumentPart(document.Id, 0, req.Content), ct);
-
             document.UpdateSize(NonNegativeLong.From(req.Content.Length));
             document.UpdateHash(BitConverter.ToString(SHA256.Create().ComputeHash(req.Content)));
             document.Lock();
 
-            await uow.SaveChangesAsync(ct).ConfigureAwait(false);
+            string objectKey = $"{document.Id}/0";
+            try
+            {
+                await using MemoryStream content = new(req.Content, writable: false);
+                await _contentStorage.StoreAsync(content, req.Content.Length, document.MimeType, objectKey, ct);
+                await uow.Repository<Document>().Create(document, ct);
+                await uow.Repository<DocumentPart>().Create(new DocumentPart(document.Id, 0, objectKey, req.Content.Length), ct);
+                await uow.SaveChangesAsync(ct).ConfigureAwait(false);
+            }
+            catch
+            {
+                await _contentStorage.DeleteAsync(objectKey, CancellationToken.None).ConfigureAwait(false);
+                throw;
+            }
 
             return TypedResults.Created((Uri)null,
                 new Browsable<DocumentInfo>
@@ -70,6 +85,7 @@ namespace Documents.API.Features.v1.Create
                         MimeType = document.MimeType,
                         CreatedAt = document.CreatedDate,
                         Hash = document.Hash,
+                        Size = document.Size,
                         Id = document.Id,
                         Name = document.Name,
                         UpdatedAt = document.UpdatedDate

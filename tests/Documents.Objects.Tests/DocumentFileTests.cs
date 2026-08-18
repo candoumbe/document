@@ -12,7 +12,7 @@ public class DocumentFileTests
     public void Ctor_throws_ArgumentOutOfRangeException_when_DocumentId_is_empty()
     {
         // Act
-        Action action = () => _ = new DocumentPart(DocumentId.Empty, 0, [1]);
+        Action action = () => _ = new DocumentPart(DocumentId.Empty, 0, "document/0", 1);
 
         // Assert
         action.Should()
@@ -23,7 +23,7 @@ public class DocumentFileTests
     public void Ctor_throws_ArgumentOutOfRangeException_when_position_is_lt_0()
     {
         // Act
-        Action action = () => new DocumentPart(DocumentId.New(), -1, new byte[] { 1 });
+        Action action = () => new DocumentPart(DocumentId.New(), -1, "document/0", 1);
 
         // Assert
         action.Should()
@@ -34,7 +34,7 @@ public class DocumentFileTests
     public void Ctor_throws_ArgumentNullException_When_content_is_null()
     {
         // Act
-        Action action = () => new DocumentPart(DocumentId.New(), 10, null);
+        Action action = () => new DocumentPart(DocumentId.New(), 10, null, 1);
 
         // Assert
         action.Should()
