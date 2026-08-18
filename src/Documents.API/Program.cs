@@ -130,6 +130,8 @@ app.MapGet("/scalar/{documentName}/{**asset}", (string asset) => Results.LocalRe
    .AllowAnonymous()
    .ExcludeFromDescription();
 
+app.MapDefaultEndpoints();
+
 await app.RunAsync().ConfigureAwait(false);
 
 return;
