@@ -4,12 +4,12 @@
     <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
   </PropertyGroup>
   <ItemGroup>
-    <PackageVersion Include="Aspire.Hosting.AppHost" Version="13.1.3" />
+    <PackageVersion Include="Aspire.Hosting.AppHost" Version="13.4.6" />
     <PackageVersion Include="Aspire.Hosting.MongoDB" Version="13.2.1" />
-    <PackageVersion Include="Aspire.Hosting.Testing" Version="13.1.3" />
-    <PackageVersion Include="Aspire.Hosting.PostgreSQL" Version="13.1.3" />
-    <PackageVersion Include="Aspire.Npgsql" Version="13.2.1" />
-    <PackageVersion Include="Aspire.Npgsql.EntityFrameworkCore.PostgreSQL" Version="13.2.1" />
+    <PackageVersion Include="Aspire.Hosting.Testing" Version="13.4.6" />
+    <PackageVersion Include="Aspire.Hosting.PostgreSQL" Version="13.4.6" />
+    <PackageVersion Include="Aspire.Npgsql" Version="13.4.6" />
+    <PackageVersion Include="Aspire.Npgsql.EntityFrameworkCore.PostgreSQL" Version="13.4.6" />
     <PackageVersion Include="AwesomeAssertions" Version="9.5.0" />
     <PackageVersion Include="Bogus" Version="35.6.5" />
     <PackageVersion Include="Candoumbe.DataAccess" Version="0.1.0-beta.356" />
@@ -18,6 +18,7 @@
     <PackageVersion Include="Candoumbe.Forms" Version="0.3.0" />
     <PackageVersion Include="Candoumbe.Pipelines" Version="3.0.1" />
     <PackageVersion Include="Candoumbe.Types.Numerics" Version="0.5.0" />
+    <PackageVersion Include="CommunityToolkit.Aspire.Hosting.Minio" Version="13.3.0" />
     <PackageVersion Include="Microsoft.Build" Version="18.9.6" />
     <PackageVersion Include="Microsoft.Build.Tasks.Core" Version="18.9.6" />
     <PackageVersion Include="Microsoft.Build.Utilities.Core" Version="18.9.6" />
@@ -54,6 +55,7 @@
     <PackageVersion Include="Microsoft.OpenApi" Version="2.7.5" />
     <PackageVersion Include="Microsoft.Testing.Extensions.CodeCoverage" Version="18.0.4" />
     <PackageVersion Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.23.0" />
+    <PackageVersion Include="Minio" Version="7.0.0" />
     <PackageVersion Include="NodaTime.Bogus" Version="3.0.2" />
     <PackageVersion Include="NodaTime.Serialization.JsonNet" Version="3.3.0" />
     <PackageVersion Include="NodaTime.Serialization.SystemTextJson" Version="1.4.0" />
