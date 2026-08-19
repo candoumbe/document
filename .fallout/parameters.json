@@ -1,5 +1,6 @@
 {
   "$schema": "build.schema.json",
   "Solution": "document.sln",
+  "BuildProjectFile": "build/Documents.Pipelines.csproj",
   "Formatters": ["Analyzers"]
 }
