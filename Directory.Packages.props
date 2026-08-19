@@ -4,12 +4,12 @@
     <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
   </PropertyGroup>
   <ItemGroup>
-    <PackageVersion Include="Aspire.Hosting.AppHost" Version="13.4.6" />
-    <PackageVersion Include="Aspire.Hosting.MongoDB" Version="13.2.1" />
-    <PackageVersion Include="Aspire.Hosting.Testing" Version="13.4.6" />
-    <PackageVersion Include="Aspire.Hosting.PostgreSQL" Version="13.4.6" />
-    <PackageVersion Include="Aspire.Npgsql" Version="13.4.6" />
-    <PackageVersion Include="Aspire.Npgsql.EntityFrameworkCore.PostgreSQL" Version="13.4.6" />
+    <PackageVersion Include="Aspire.Hosting.AppHost" Version="13.5.0" />
+    <PackageVersion Include="Aspire.Hosting.MongoDB" Version="13.5.0" />
+    <PackageVersion Include="Aspire.Hosting.Testing" Version="13.5.0" />
+    <PackageVersion Include="Aspire.Hosting.PostgreSQL" Version="13.5.0" />
+    <PackageVersion Include="Aspire.Npgsql" Version="13.5.0" />
+    <PackageVersion Include="Aspire.Npgsql.EntityFrameworkCore.PostgreSQL" Version="13.5.0" />
     <PackageVersion Include="AwesomeAssertions" Version="9.5.0" />
     <PackageVersion Include="Bogus" Version="35.6.5" />
     <PackageVersion Include="Candoumbe.DataAccess" Version="0.1.0-beta.356" />
@@ -37,7 +37,7 @@
     <PackageVersion Include="FsCheck.Xunit.v3" Version="3.3.4" />
     <PackageVersion Include="JetBrains.Annotations" Version="2026.2.0" />
     <PackageVersion Include="MartinCostello.Logging.XUnit.v3" Version="0.7.1" />
-    <PackageVersion Include="MessagePack" Version="2.5.302" />
+    <PackageVersion Include="MessagePack" Version="3.1.8" />
     <PackageVersion Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="10.0.11" />
     <PackageVersion Include="Microsoft.AspNetCore.JsonPatch" Version="10.0.11" />
     <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="10.0.11" />
@@ -52,7 +52,7 @@
     <PackageVersion Include="Microsoft.Extensions.Http.Resilience" Version="10.9.0" />
     <PackageVersion Include="Microsoft.Extensions.ServiceDiscovery" Version="10.9.0" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.9.0" />
-    <PackageVersion Include="Microsoft.OpenApi" Version="2.7.5" />
+    <PackageVersion Include="Microsoft.OpenApi" Version="2.12.0" />
     <PackageVersion Include="Microsoft.Testing.Extensions.CodeCoverage" Version="18.0.4" />
     <PackageVersion Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.23.0" />
     <PackageVersion Include="Minio" Version="7.0.0" />
