@@ -7,8 +7,7 @@
     <NoWarn>CS0649;CS0169;CA1050;CA1822;CA2211;IDE1006</NoWarn>
     <FalloutRootDirectory>..</FalloutRootDirectory>
     <FalloutScriptDirectory>..</FalloutScriptDirectory>
-    <FalloutTelemetryVersion>1</FalloutTelemetryVersion>
-    <IsPackable>false</IsPackable>
+<IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
@@ -20,8 +19,7 @@
     <PackageReference Include="Microsoft.Build.Tasks.Core" />
     <PackageReference Include="Microsoft.Build.Utilities.Core" />
     <PackageReference Include="NuGet.Packaging" />
-    <PackageReference Include="System.Security.Cryptography.Xml" />
-    <PackageDownload Include="GitVersion.Tool" Version="[6.1.0]" />
+<PackageDownload Include="GitVersion.Tool" Version="[6.1.0]" />
     <PackageDownload Include="dotnet-stryker" Version="[4.8.1]" />
     <PackageDownload Include="dotnet-ef" Version="[10.0.0]" />
   </ItemGroup>
