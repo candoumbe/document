@@ -440,7 +440,7 @@ public class Build : EnhancedBuild,
             const string imageName = "document.worker";
 
             string filename = $"{imageName}-{version}.tar.gz";
-            Project project = this.Get<IHaveSolution>().Solution.AllProjects.Single(project => project.Name == "Document.Migrator");
+            Project project = this.Get<IHaveSolution>().Solution.AllProjects.Single(project => project.Name == "Documents.Migrator");
 
             Registries.ForEach(registry =>
             {
