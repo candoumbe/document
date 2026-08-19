@@ -75,9 +75,9 @@ public class GetByIdEndpointShould : IClassFixture<PostgresSqlFixture>
 
         DocumentPart[] parts =
         [
-            new (documentId, 0, faker.Random.Bytes(10)),
-            new (documentId, 1, faker.Random.Bytes(10)),
-            new (documentId, 2, faker.Random.Bytes(10))
+            new (documentId, 0, $"{documentId}/0", 10),
+            new (documentId, 1, $"{documentId}/1", 10),
+            new (documentId, 2, $"{documentId}/2", 10)
         ];
 
         Document entry = new(id: documentId, name: "the batman in action", mimeType: "image/mpeg4");

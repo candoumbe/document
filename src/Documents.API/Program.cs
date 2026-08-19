@@ -27,6 +27,7 @@ Action<JsonSerializerOptions> optionsSerializerSettings = s =>
     s.AllowTrailingCommas = true;
     s.ConfigureForNodaTime(DateTimeZoneProviders.Tzdb);
     s.Converters.Add(new JsonStringEnumConverter<OperationType>());
+    s.Converters.Add(new NonNegativeLongJsonConverter());
 };
 
 // Api versions that are currently suported

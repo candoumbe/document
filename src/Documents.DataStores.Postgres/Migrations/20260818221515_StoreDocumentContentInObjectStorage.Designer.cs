@@ -3,6 +3,7 @@ using System;
 using Documents.DataStores;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NodaTime;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Documents.DataStores.Postgres.Migrations
 {
     [DbContext(typeof(DocumentsStore))]
-    partial class DocumentsStoreModelSnapshot : ModelSnapshot
+    [Migration("20260818221515_StoreDocumentContentInObjectStorage")]
+    partial class StoreDocumentContentInObjectStorage
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

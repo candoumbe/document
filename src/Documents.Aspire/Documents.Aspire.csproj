@@ -12,6 +12,7 @@
   <ItemGroup>
     <PackageReference Include="Aspire.Hosting.AppHost"/>
     <PackageReference Include="Aspire.Hosting.PostgreSQL"/>
+    <PackageReference Include="CommunityToolkit.Aspire.Hosting.Minio" />
   </ItemGroup>
 
   <!-- Same logical name as in build/Documents.Pipelines.csproj: ContainerImages resolves it by that name in both assemblies. -->

@@ -6,6 +6,8 @@ IDistributedApplicationBuilder builder = DistributedApplication.CreateBuilder(ar
 PinnedContainerImage postgresImage = ContainerImages.Postgres;
 var postgres = builder.AddPostgres("postgres")
     .WithImage(postgresImage.Image, postgresImage.Tag);
+var minio = builder.AddMinioContainer("minio")
+    .WithDataVolume();
 
 
 bool isRunningIntegrationTests = builder.Configuration.GetValue(RunningIntegrationTestsConfigName, false);
@@ -25,6 +27,7 @@ var api = builder.AddProject<Documents_API>("api")
     // Containerised runs receive no environment name and silently fall back to Production.
     .WithEnvironment("ASPNETCORE_ENVIRONMENT", builder.Environment.EnvironmentName)
     .WithReference(postgres).WaitFor(postgres)
+    .WithReference(minio).WaitFor(minio)
     .WaitForCompletion(migrationService);
 
 

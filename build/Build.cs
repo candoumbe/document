@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using Candoumbe.Pipelines.Components;
 using Candoumbe.Pipelines.Components.Formatting;
 using Candoumbe.Pipelines.Components.GitHub;
@@ -171,6 +172,7 @@ public class Build : EnhancedBuild,
     /// <inheritdoc />
     string IReportUnitTestCoverage.CodeCoverageHistoryReportArtifactName => "unit-test-coverage-history-report";
 
+    /// <inheritdoc />
     protected override void OnBuildCreated()
     {
         if (IsServerBuild)
@@ -352,9 +354,7 @@ public class Build : EnhancedBuild,
                                   this.Get<IHaveGitHubRepository>().GitHubToken)
     ];
 
-    public Target PublishApi => _ =>
-    {
-        return _.Description("Publish image of the API")
+    public Target PublishApi => _ => _.Description("Publish image of the API")
             .DependsOn<IPushNugetPackages>()
             .TriggeredBy<IPushNugetPackages>()
             .After(Tests)
@@ -401,7 +401,7 @@ public class Build : EnhancedBuild,
 
                     Verbose("Image {ImageName} loaded successfully", imageNameWithRegistry);
 
-                    IReadOnlyList<string> tags =  GenerateDockerTagsForBranch(this.Get<IHaveGitHubRepository>().GitRepository, gitVersion);
+                    IReadOnlySet<string> tags =  GenerateDockerTagsForBranch(this.Get<IHaveGitHubRepository>().GitRepository, gitVersion);
                     Verbose("Tagging image {ImageName} with tags: {Tags}", imageNameWithRegistry, string.Join(", ", tags));
 
                     DockerImageTag(settings => settings.SetSourceImage($"{imageNameWithRegistry}:{version}")
@@ -431,42 +431,113 @@ public class Build : EnhancedBuild,
 
             });
 
-        IReadOnlyList<string> GenerateDockerTagsForBranch(GitRepository repository, GitVersion version)
+    public Target PublishWorker => _ => _.Description("Publish image of the migration worker")
+        .After(Tests)
+        .Consumes(this.Get<ICompile>().Compile)
+        .Produces(this.Get<IHaveArtifacts>().ArtifactsDirectory / "publish" / "**" / "*.tar.gz")
+        .Executes(() =>
         {
-            List<string> tags = [];
+            GitVersion gitVersion = this.Get<IHaveGitVersion>().GitVersion;
+            string version = gitVersion.FullSemVer;
+            const string imageName = "document.worker";
 
-            if(repository.IsOnReleaseBranch())
-            {
-                tags.Add($"{version.Major}.{version.Minor}{version.PreReleaseLabelWithDash}");
-                tags.Add($"{version.MajorMinorPatch}{version.PreReleaseLabelWithDash}");
-            }
-            else if (repository.IsOnHotfixBranch() || repository.IsOnFeatureBranch() || (repository.Branch?.StartsWith("chore/*", StringComparison.OrdinalIgnoreCase) ?? false))
-            {
-                tags.Add(repository.Branch.Slugify());
-            }
-            else if (repository.IsOnDevelopBranch())
-            {
-                tags.Add($"{version.Major}-{version.EscapedBranchName}");
-                tags.Add($"{version.Major}{version.PreReleaseLabelWithDash}");
-                tags.Add($"{version.Major}.{version.Minor}{version.PreReleaseLabelWithDash}");
-                tags.Add($"{version.Major}.{version.Minor}{version.EscapedBranchName}");
-                tags.Add($"{version.MajorMinorPatch}{version.PreReleaseLabelWithDash}");
-            }
-            else if (repository.IsOnMainOrMasterBranch())
-            {
-                tags.Add($"{version.Major}");
-                tags.Add($"{version.Major}-latest");
-                tags.Add($"{version.Major}.{version.Minor}");
-                tags.Add($"{version.Major}.{version.Minor}-latest");
-                tags.Add($"{version.MajorMinorPatch}");
-                tags.Add($"{version.MajorMinorPatch}-latest");
-            }
+            string filename = $"{imageName}-{version}.tar.gz";
+            Project project = this.Get<IHaveSolution>().Solution.AllProjects.Single(project => project.Name == "Document.Migrator");
 
-            return tags;
+            Registries.ForEach(registry =>
+            {
+                AbsolutePath containerFullPath = this.Get<IHaveArtifacts>().ArtifactsDirectory / "publish" / registry.Name / filename;
+
+                Information("Publishing {ImageName} (version {Version}) for {RegistryName} ({RegistryUri}) to {ContainerFullPath}",
+                    project.Name, version, registry.Name, registry.Uri, containerFullPath);
+
+                string imageNameWithRegistry = $"{registry.Uri}/{this.Get<IHaveGitRepository>().GitRepository.GetGitHubOwner()}/{imageName}";
+                IDictionary<string, object> publishProperties = new Dictionary<string, object>
+                {
+                    ["ContainerArchiveOutputPath"] = containerFullPath,
+                    ["ContainerRepository"] = imageNameWithRegistry,
+                    ["ContainerImageTag"] = gitVersion.SemVer,
+                    ["ContainerImageFormat"] = "Docker",
+                    ["ContainerRuntime"] = "docker",
+                    ["ContainerGenerateLabelsImageCreated"] = DateTime.UtcNow.ToString("O")
+                };
+
+                DotNetPublish(settings => settings.SetProject(project)
+                    .SetConfiguration(this.Get<IHaveConfiguration>().Configuration)
+                    .EnableSelfContained()
+                    .SetProperties(publishProperties)
+                    .SetProcessAdditionalArguments(["/t:PublishContainer", "--tl"]));
+
+                Information("{ImageName} (version {Version} published successfully to {ContainerFullPath}", project.Name, version, containerFullPath);
+
+                Verbose("Loading image {ImageName} from {ContainerFullPath}", imageNameWithRegistry, containerFullPath);
+                DockerLoad(settings => settings.SetInput(containerFullPath));
+
+                Verbose("Image {ImageName} loaded successfully", imageNameWithRegistry);
+
+                IReadOnlySet<string> tags = GenerateDockerTagsForBranch(this.Get<IHaveGitHubRepository>().GitRepository, gitVersion);
+                Verbose("Tagging image {ImageName} with tags: {@Tags}", imageNameWithRegistry, tags);
+
+                DockerImageTag(settings => settings.SetSourceImage($"{imageNameWithRegistry}:{gitVersion.SemVer}")
+                    .CombineWith(tags, (dockerTagSettings, tag) => dockerTagSettings.SetTargetImage($"{imageNameWithRegistry}:{tag}")));
+
+                Verbose("Image {ImageName} tagged successfully", imageNameWithRegistry);
+
+                if (IsServerBuild)
+                {
+                    Information("Pushing image {ImageName} to {RegistryName} ({RegistryUri}) with tags: {@Tags}",
+                        imageNameWithRegistry, registry.Name, registry.Uri, tags);
+
+                    Verbose("Logging into {RegistryUri}", registry.Uri);
+
+                    DockerLogin(settings => settings.SetUsername(this.Get<IHaveGitHubRepository>().GitRepository.GetGitHubOwner())
+                        .SetPassword(registry.Password)
+                        .SetServer(registry.Uri));
+
+                    Verbose("Logged into {RegistryUri} successfully", registry.Uri);
+
+                    DockerImagePush(settings =>
+                        settings.CombineWith(tags, (pushSettings, tag) => pushSettings.SetName($"{imageNameWithRegistry}:{tag}")));
+
+                    Information("Image {ImageName} pushed successfully", imageNameWithRegistry);
+                }
+            });
+        });
+
+    public static IReadOnlySet<string> GenerateDockerTagsForBranch(GitRepository repository, GitVersion version)
+    {
+        HashSet<string> tags = new();
+
+        if(repository.IsOnReleaseBranch())
+        {
+            tags.Add($"{version.Major}.{version.Minor}{version.PreReleaseLabelWithDash}");
+            tags.Add($"{version.MajorMinorPatch}{version.PreReleaseLabelWithDash}");
         }
-    };
+        else if (repository.IsOnHotfixBranch() || repository.IsOnFeatureBranch() || (repository.Branch?.StartsWith("chore/*", StringComparison.OrdinalIgnoreCase) ?? false))
+        {
+            tags.Add(repository.Branch.Slugify());
+        }
+        else if (repository.IsOnDevelopBranch())
+        {
+            tags.Add($"{version.Major}-{version.EscapedBranchName}");
+            tags.Add($"{version.Major}{version.PreReleaseLabelWithDash}");
+            tags.Add($"{version.Major}.{version.Minor}{version.PreReleaseLabelWithDash}");
+            tags.Add($"{version.Major}.{version.Minor}{version.EscapedBranchName}");
+            tags.Add($"{version.MajorMinorPatch}{version.PreReleaseLabelWithDash}");
+        }
+        else if (repository.IsOnMainOrMasterBranch())
+        {
+            tags.Add($"{version.Major}");
+            tags.Add($"{version.Major}-latest");
+            tags.Add($"{version.Major}.{version.Minor}");
+            tags.Add($"{version.Major}.{version.Minor}-latest");
+            tags.Add($"{version.MajorMinorPatch}");
+            tags.Add($"{version.MajorMinorPatch}-latest");
+        }
 
-
+        return tags;
+    }
+  
     public Target Tests => _ => _.Triggers(ArchitecturalTests,
                                            this.Get<IUnitTest>().UnitTests,
                                            this.Get<IIntegrationTest>().IntegrationTests)
@@ -476,7 +547,7 @@ public class Build : EnhancedBuild,
     // /// <summary>
     // /// Projects to be targeted by mutation tests.
     // /// </summary>
-    // private static readonly string[] s_projects = ["Agenda.Ids", "Agenda.Objects", "Agenda.API"];
+    // private static readonly string[] s_projects = ["Documents.Ids", "Documents.Objects", "Documents.API"];
 
     // /// <inheritdoc />
     // IEnumerable<MutationProjectConfiguration> IMutationTest.MutationTestsProjects =>

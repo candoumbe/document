@@ -47,6 +47,7 @@ public class GetByIdEndpoint : Endpoint<DocumentId, Results<Ok<Browsable<Documen
             Id = doc.Id,
             MimeType = doc.MimeType,
             Hash = doc.Hash,
+            Size = doc.Size,
             CreatedAt = doc.CreatedDate,
             UpdatedAt = doc.UpdatedDate
         });
