@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using Candoumbe.Pipelines.Components;
 using Candoumbe.Pipelines.Components.Formatting;
 using Candoumbe.Pipelines.Components.GitHub;
@@ -25,7 +24,6 @@ using static Fallout.Common.Tools.DotNet.DotNetTasks;
 using static Fallout.Common.Tools.EntityFramework.EntityFrameworkTasks;
 using static Fallout.Common.Utilities.ConsoleUtility;
 using static Serilog.Log;
-using Project = Fallout.Common.ProjectModel.Project;
 
 [GitHubActions(
     "integration",
@@ -35,7 +33,7 @@ using Project = Fallout.Common.ProjectModel.Project;
     OnPushBranchesIgnore = [IHaveMainBranch.MainBranchName],
     PublishArtifacts = true,
     EnableGitHubToken = true,
-    InvokedTargets = [nameof(Tests), nameof(IPushNugetPackages.Publish), nameof(IPack.Pack)],
+    InvokedTargets = [nameof(Tests), nameof(PublishImages), nameof(IPack.Pack)],
     CacheKeyFiles = ["global.json", "src/**/*.csproj"],
     ImportSecrets =
     [
@@ -58,7 +56,7 @@ using Project = Fallout.Common.ProjectModel.Project;
     FetchDepth = 0,
     AutoGenerate = false,
     OnPushBranches = [ IHaveMainBranch.MainBranchName ],
-    InvokedTargets = [nameof(Tests), nameof(IPushNugetPackages.Publish), nameof(ICreateGithubRelease.AddGithubRelease)],
+    InvokedTargets = [nameof(Tests), nameof(PublishImages), nameof(ICreateGithubRelease.AddGithubRelease)],
     EnableGitHubToken = true,
     CacheKeyFiles = ["global.json", "src/**/*.csproj"],
     PublishArtifacts = true,
@@ -543,6 +541,11 @@ public class Build : EnhancedBuild,
                                            this.Get<IIntegrationTest>().IntegrationTests)
                                .Description("Runs all tests");
 
+        public Target PublishImages => _ => _.Description("Publish images of the API and frontend")
+            .DependsOn(PublishApi, PublishWorker)
+            .After(Tests)
+            .TryBefore<ICreateGithubRelease>(x => x.AddGithubRelease)
+            .Consumes(this.Get<ICompile>().Compile);
 
     // /// <summary>
     // /// Projects to be targeted by mutation tests.
