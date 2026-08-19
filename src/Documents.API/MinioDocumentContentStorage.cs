@@ -26,17 +26,19 @@ public sealed class MinioDocumentContentStorage : IDocumentContentStorage
             .Where(part => part.Length == 2)
             .ToDictionary(part => part[0], part => part[1], StringComparer.OrdinalIgnoreCase);
 
-        string host = connection.GetValueOrDefault("Host")
-            ?? throw new InvalidOperationException("The minio connection string must contain a Host.");
-        int port = connection.TryGetValue("Port", out string portValue) && int.TryParse(portValue, out int parsedPort) ? parsedPort : 9000;
-        string username = connection.GetValueOrDefault("Username")
-            ?? throw new InvalidOperationException("The minio connection string must contain a Username.");
-        string password = connection.GetValueOrDefault("Password")
-            ?? throw new InvalidOperationException("The minio connection string must contain a Password.");
+        // Aspire's MinIO resource emits "Endpoint=http://host:port;AccessKey=...;SecretKey=...", not Host/Port/Username/Password.
+        string endpoint = connection.GetValueOrDefault("Endpoint")
+            ?? throw new InvalidOperationException("The minio connection string must contain an Endpoint.");
+        string accessKey = connection.GetValueOrDefault("AccessKey")
+            ?? throw new InvalidOperationException("The minio connection string must contain an AccessKey.");
+        string secretKey = connection.GetValueOrDefault("SecretKey")
+            ?? throw new InvalidOperationException("The minio connection string must contain a SecretKey.");
+
+        var endpointUri = new Uri(endpoint, UriKind.Absolute);
 
         _client = new MinioClient()
-            .WithEndpoint(host, port)
-            .WithCredentials(username, password)
+            .WithEndpoint(endpointUri.Host, endpointUri.Port)
+            .WithCredentials(accessKey, secretKey)
             .Build();
     }
 
