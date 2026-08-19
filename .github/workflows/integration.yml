@@ -21,7 +21,8 @@ on:
     branches-ignore:
       - main
     paths-ignore:
-      - 'docs/**'
+      - '.github/ISSUE_TEMPLATE/*'
+      - 'docs/*'
       - 'README.md'
       - 'CHANGELOG.md'
       - LICENSE
@@ -41,8 +42,8 @@ jobs:
             .fallout/temp
             ~/.nuget/packages
           key: ${{ runner.os }}-${{ hashFiles('global.json', 'src/**/*.csproj') }}
-      - name: 'Run: Tests, Publish, Pack'
-        run: ./build.cmd Tests Publish Pack
+      - name: 'Run: Tests, PublishImages, Pack'
+        run: ./build.cmd Tests PublishImages Pack
         env:
           NuGetApiKey: ${{ secrets.NUGET_API_KEY }}
           CodecovToken: ${{ secrets.CODECOV_TOKEN }}
