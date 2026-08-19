@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Aspire.Hosting;
 using Candoumbe.Forms;
 using DataFilters.Converters;
+using Documents.API.TypeMappers;
 using Documents.Ids;
 using Json.More;
 using Json.Patch;
@@ -44,6 +45,7 @@ public sealed class DocumentApplicationFixture : IAsyncLifetime
         ApiJsonSerializerOptions.Converters.Add(new JsonStringEnumConverter<OperationType>());
         ApiJsonSerializerOptions.Converters.Add(new EnumStringConverter<OperationType>());
         ApiJsonSerializerOptions.Converters.Add(new DocumentId.DocumentIdSystemTextJsonConverter());
+        ApiJsonSerializerOptions.Converters.Add(new NonNegativeLongJsonConverter());
     }
 
     ///<inheritdoc />
