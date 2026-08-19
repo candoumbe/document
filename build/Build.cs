@@ -366,7 +366,7 @@ public class Build : EnhancedBuild,
                 const string imageName = "agenda.api";
 
                 string filename = $"{imageName}-{version}.tar.gz";
-                Project project = this.Get<IHaveSolution>().Solution.AllProjects.Single(project => project.Name == "Agenda.API");
+                Project project = this.Get<IHaveSolution>().Solution.AllProjects.Single(project => project.Name == "Documents.API");
 
                 Registries.ForEach(registry =>
                 {
