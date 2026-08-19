@@ -1,0 +1,8 @@
+{
+  "agents": [
+    { "persistent_name": "Deckard", "universe": "Blade Runner", "created_at": "2026-08-19", "legacy_named": false, "status": "active" },
+    { "persistent_name": "Rachael", "universe": "Blade Runner", "created_at": "2026-08-19", "legacy_named": false, "status": "active" },
+    { "persistent_name": "Gaff", "universe": "Blade Runner", "created_at": "2026-08-19", "legacy_named": false, "status": "active" },
+    { "persistent_name": "Batty", "universe": "Blade Runner", "created_at": "2026-08-19", "legacy_named": false, "status": "active" }
+  ]
+}
