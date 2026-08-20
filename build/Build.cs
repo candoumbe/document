@@ -513,8 +513,8 @@ public class Build : EnhancedBuild,
         }
         else if (repository.IsOnHotfixBranch()
                  || repository.IsOnFeatureBranch()
-                 || (repository.Branch?.StartsWith("chore/*", StringComparison.OrdinalIgnoreCase) ?? false)
-                 || (repository.Branch?.StartsWith("coldfix/*", StringComparison.OrdinalIgnoreCase) ?? false)
+                 || (repository.Branch?.Like("chore/*", true) ?? false)
+                 || (repository.Branch?.Like("coldfix/*", true) ?? false)
                  )
         {
             tags.Add(repository.Branch.Slugify());
