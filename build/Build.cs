@@ -363,7 +363,7 @@ public class Build : EnhancedBuild,
             {
                 GitVersion gitVersion = this.Get<IHaveGitVersion>().GitVersion;
                 string version = gitVersion.FullSemVer;
-                const string imageName = "agenda.api";
+                const string imageName = "documents.api";
 
                 string filename = $"{imageName}-{version}.tar.gz";
                 Project project = this.Get<IHaveSolution>().Solution.AllProjects.Single(project => project.Name == "Documents.API");
@@ -437,7 +437,7 @@ public class Build : EnhancedBuild,
         {
             GitVersion gitVersion = this.Get<IHaveGitVersion>().GitVersion;
             string version = gitVersion.FullSemVer;
-            const string imageName = "document.worker";
+            const string imageName = "documents.worker";
 
             string filename = $"{imageName}-{version}.tar.gz";
             Project project = this.Get<IHaveSolution>().Solution.AllProjects.Single(project => project.Name == "Documents.Migrator");
