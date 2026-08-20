@@ -504,14 +504,18 @@ public class Build : EnhancedBuild,
 
     public static IReadOnlySet<string> GenerateDockerTagsForBranch(GitRepository repository, GitVersion version)
     {
-        HashSet<string> tags = new();
+        HashSet<string> tags = new HashSet<string>();
 
         if(repository.IsOnReleaseBranch())
         {
             tags.Add($"{version.Major}.{version.Minor}{version.PreReleaseLabelWithDash}");
             tags.Add($"{version.MajorMinorPatch}{version.PreReleaseLabelWithDash}");
         }
-        else if (repository.IsOnHotfixBranch() || repository.IsOnFeatureBranch() || (repository.Branch?.StartsWith("chore/*", StringComparison.OrdinalIgnoreCase) ?? false))
+        else if (repository.IsOnHotfixBranch()
+                 || repository.IsOnFeatureBranch()
+                 || (repository.Branch?.StartsWith("chore/*", StringComparison.OrdinalIgnoreCase) ?? false)
+                 || (repository.Branch?.StartsWith("coldfix/*", StringComparison.OrdinalIgnoreCase) ?? false)
+                 )
         {
             tags.Add(repository.Branch.Slugify());
         }
