@@ -502,29 +502,33 @@ public class Build : EnhancedBuild,
             });
         });
 
-    public static IReadOnlySet<string> GenerateDockerTagsForBranch(GitRepository repository, GitVersion version)
+    private static IReadOnlySet<string> GenerateDockerTagsForBranch(GitRepository repository, GitVersion version)
     {
-        HashSet<string> tags = new HashSet<string>();
+        HashSet<string> tags = new(StringComparer.OrdinalIgnoreCase);
 
-        if(repository.IsOnReleaseBranch())
+        if (repository.IsOnReleaseBranch())
         {
             tags.Add($"{version.Major}.{version.Minor}{version.PreReleaseLabelWithDash}");
             tags.Add($"{version.MajorMinorPatch}{version.PreReleaseLabelWithDash}");
         }
         else if (repository.IsOnHotfixBranch()
                  || repository.IsOnFeatureBranch()
-                 || (repository.Branch?.Like("chore/*", true) ?? false)
-                 || (repository.Branch?.Like("coldfix/*", true) ?? false)
-                 )
+                 || (repository.Branch?.Like("chore/*", ignoreCase:true) ?? false)
+                 || (repository.Branch?.Like("coldfix/*", ignoreCase:true) ?? false))
         {
-            tags.Add(repository.Branch.Slugify());
+            tags.Add($"{version.Major}{version.PreReleaseLabelWithDash}");
+            tags.Add($"{version.Major}.{version.Minor}{version.PreReleaseLabelWithDash}");
+            tags.Add($"{version.Major}.{version.Minor}{version.PreReleaseLabelWithDash}.{version.ShortSha}");
+            tags.Add($"{version.MajorMinorPatch}{version.PreReleaseLabelWithDash}");
+            tags.Add($"{version.MajorMinorPatch}{version.PreReleaseLabelWithDash}.{version.ShortSha}");
         }
         else if (repository.IsOnDevelopBranch())
         {
             tags.Add($"{version.Major}-{version.EscapedBranchName}");
             tags.Add($"{version.Major}{version.PreReleaseLabelWithDash}");
             tags.Add($"{version.Major}.{version.Minor}{version.PreReleaseLabelWithDash}");
-            tags.Add($"{version.Major}.{version.Minor}{version.EscapedBranchName}");
+            tags.Add($"{version.Major}.{version.Minor}-{version.EscapedBranchName}");
+            tags.Add($"{version.Major}.{version.Minor}-{version.EscapedBranchName}.{version.ShortSha}");
             tags.Add($"{version.MajorMinorPatch}{version.PreReleaseLabelWithDash}");
         }
         else if (repository.IsOnMainOrMasterBranch())
@@ -534,7 +538,6 @@ public class Build : EnhancedBuild,
             tags.Add($"{version.Major}.{version.Minor}");
             tags.Add($"{version.Major}.{version.Minor}-latest");
             tags.Add($"{version.MajorMinorPatch}");
-            tags.Add($"{version.MajorMinorPatch}-latest");
         }
 
         return tags;
