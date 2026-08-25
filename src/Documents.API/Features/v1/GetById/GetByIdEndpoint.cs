@@ -12,7 +12,7 @@ namespace Documents.API.Features.v1.GetById;
 /// <summary>
 /// Gets a document by its identifier.
 /// </summary>
-public class GetByIdEndpoint : Endpoint<DocumentId, Results<Ok<Browsable<DocumentInfo>>, NotFound>>
+public class GetByIdEndpoint : Endpoint<GetByIdRequest, Results<Ok<Browsable<DocumentInfo>>, NotFound>>
 {
     private readonly IUnitOfWorkFactory _uowFactory;
     private readonly LinkGenerator _linkGenerator;
@@ -38,7 +38,7 @@ public class GetByIdEndpoint : Endpoint<DocumentId, Results<Ok<Browsable<Documen
     }
 
     /// <inheritdoc />
-    public override async Task<Results<Ok<Browsable<DocumentInfo>>, NotFound>> ExecuteAsync(DocumentId req, CancellationToken ct)
+    public override async Task<Results<Ok<Browsable<DocumentInfo>>, NotFound>> ExecuteAsync(GetByIdRequest req, CancellationToken ct)
     {
         using IUnitOfWork uow = _uowFactory.NewUnitOfWork();
         SelectSpecification<Document, DocumentInfo> selector = new(doc => new DocumentInfo
@@ -51,7 +51,7 @@ public class GetByIdEndpoint : Endpoint<DocumentId, Results<Ok<Browsable<Documen
             CreatedAt = doc.CreatedDate,
             UpdatedAt = doc.UpdatedDate
         });
-        FilterSpecification<DocumentInfo> filter = new(doc => doc.Id == req);
+        FilterSpecification<DocumentInfo> filter = new(doc => doc.Id == req.Id);
         Option<DocumentInfo> entity = await uow.Repository<Document>().SingleOrDefault(selector, filter, ct);
 
         return entity.Match<Results<Ok<Browsable<DocumentInfo>>, NotFound>>(

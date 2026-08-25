@@ -1,3 +1,4 @@
+using Aspire.Hosting;
 using Documents.Aspire;
 using Microsoft.Extensions.Configuration;
 using Projects;

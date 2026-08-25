@@ -10,7 +10,7 @@ namespace Documents.API.Features.v1.Delete;
 /// <summary>
 /// Deletes a document by its identifier.
 /// </summary>
-public class DeleteByIdEndpoint : Endpoint<DocumentId, Results<NotFound, NoContent>>
+public class DeleteByIdEndpoint : Endpoint<DeleteByIdRequest, Results<NotFound, NoContent>>
 {
     private readonly IUnitOfWorkFactory _uowFactory;
 
@@ -32,10 +32,10 @@ public class DeleteByIdEndpoint : Endpoint<DocumentId, Results<NotFound, NoConte
     }
 
     /// <inheritdoc />
-    public override async Task<Results<NotFound, NoContent>> ExecuteAsync(DocumentId req, CancellationToken ct)
+    public override async Task<Results<NotFound, NoContent>> ExecuteAsync(DeleteByIdRequest req, CancellationToken ct)
     {
         using IUnitOfWork uow = _uowFactory.NewUnitOfWork();
-        FilterSpecification<Document> filter = new(x => x.Id == req);
+        FilterSpecification<Document> filter = new(x => x.Id == req.Id);
 
         await uow.Repository<Document>().Delete(filter, ct);
         await uow.SaveChangesAsync(ct)
