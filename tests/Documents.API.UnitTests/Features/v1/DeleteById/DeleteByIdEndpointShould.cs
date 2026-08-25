@@ -43,9 +43,12 @@ public class DeleteByIdEndpointShould : IClassFixture<PostgresSqlFixture>
     [Fact]
     public async Task Return_NoContent_when_the_request_does_not_match_a_document_in_the_datastore()
     {
-        // Act
+        // Arrange
         DocumentId idToDelete = DocumentId.New();
-        Results<NotFound, NoContent> result = await _sut.ExecuteAsync(idToDelete, TestContext.Current.CancellationToken);
+        DeleteByIdRequest request = new(idToDelete);
+
+        // Act
+        Results<NotFound, NoContent> result = await _sut.ExecuteAsync(request, TestContext.Current.CancellationToken);
 
         // Assert
         result.Result.Should()
@@ -56,10 +59,11 @@ public class DeleteByIdEndpointShould : IClassFixture<PostgresSqlFixture>
     public async Task Returns_NoContent_when_the_request_does_match_an_existing_document()
     {
         // Arrange
+        DocumentId idToDelete = DocumentId.New();
+        DeleteByIdRequest request = new(idToDelete);
 
         // Act
-        DocumentId idToDelete = DocumentId.New();
-        Results<NotFound, NoContent> actionResult = await _sut.ExecuteAsync(idToDelete, TestContext.Current.CancellationToken);
+        Results<NotFound, NoContent> actionResult = await _sut.ExecuteAsync(request, TestContext.Current.CancellationToken);
 
         // Assert
         actionResult.Result.Should()
