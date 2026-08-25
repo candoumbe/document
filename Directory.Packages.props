@@ -18,7 +18,7 @@
     <PackageVersion Include="Candoumbe.Forms" Version="0.3.0" />
     <PackageVersion Include="Candoumbe.Pipelines" Version="3.0.1" />
     <PackageVersion Include="Candoumbe.Types.Numerics" Version="0.5.0" />
-    <PackageVersion Include="CommunityToolkit.Aspire.Hosting.Minio" Version="13.4.0" />
+    <PackageVersion Include="CommunityToolkit.Aspire.Hosting.Minio" Version="13.5.0" />
     <PackageVersion Include="Microsoft.Build" Version="18.9.6" />
     <PackageVersion Include="Microsoft.Build.Tasks.Core" Version="18.9.6" />
     <PackageVersion Include="Microsoft.Build.Utilities.Core" Version="18.9.6" />
