@@ -39,9 +39,6 @@ public static class ServiceCollectionExtensions
                 IClock clock = serviceProvider.GetRequiredService<IClock>();
                 return new EntityFrameworkUnitOfWorkFactory<DocumentsStore>(dbContextOptions, options => new DocumentsStore(options, clock), new DocumentRepositoryFactory());
             });
-
-            return;
-
         }
 
         /// <summary>

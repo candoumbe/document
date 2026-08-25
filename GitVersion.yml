@@ -1,7 +1,19 @@
 mode: ContinuousDeployment
 branches:
+  chore:
+    regex: "^chore(s)?[/-](?<BranchName>.+)"
+    label: '{BranchName}'
+    increment: Inherit
+    prevent-increment:
+      of-merged-branch: false
+    track-merge-target: false
+    source-branches: [ 'develop' ]
+    tracks-release-branches: false
+    is-release-branch: false
+    pre-release-weight: 30000
   feature:
     regex: "^feature(s)?[/-](?<BranchName>.+)"
+    mode: ContinuousDelivery
   coldfix:
     regex: "^coldfix(es)?[/-](?<BranchName>.+)"
     mode: ContinuousDelivery

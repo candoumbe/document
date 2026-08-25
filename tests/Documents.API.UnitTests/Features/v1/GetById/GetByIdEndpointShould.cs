@@ -7,6 +7,7 @@ using Candoumbe.DataAccess.EFStore;
 using Candoumbe.Types.Numerics;
 using Documents.API.Features;
 using Documents.API.Features.v1;
+using Documents.API.Features.v1.Delete;
 using Documents.API.Features.v1.GetById;
 using Documents.API.UnitTests.Fixtures;
 using Documents.DataStores;
@@ -91,9 +92,11 @@ public class GetByIdEndpointShould : IClassFixture<PostgresSqlFixture>
             await uow.SaveChangesAsync(TestContext.Current.CancellationToken);
         }
 
+        GetByIdRequest request = new(documentId);
+
 
         // Act
-        Results<Ok<Browsable<DocumentInfo>>, NotFound> result = await _sut.ExecuteAsync(documentId, ct: TestContext.Current.CancellationToken);
+        Results<Ok<Browsable<DocumentInfo>>, NotFound> result = await _sut.ExecuteAsync(request, TestContext.Current.CancellationToken);
 
         // Assert
         result.Result.Should().BeAssignableTo<Ok<Browsable<DocumentInfo>>>();
@@ -105,8 +108,12 @@ public class GetByIdEndpointShould : IClassFixture<PostgresSqlFixture>
     [Fact]
     public async Task Returns_NotFound_when_the_request_does_not_match_an_existing_document()
     {
+        // Arrange
+        DocumentId nonExistentDocumentId = DocumentId.New();
+        GetByIdRequest request = new(nonExistentDocumentId);
+
         // Act
-        Results<Ok<Browsable<DocumentInfo>>, NotFound> result = await _sut.ExecuteAsync(DocumentId.New(), TestContext.Current.CancellationToken);
+        Results<Ok<Browsable<DocumentInfo>>, NotFound> result = await _sut.ExecuteAsync(request, TestContext.Current.CancellationToken);
 
         // Assert
         result.Result.Should().BeAssignableTo<NotFound>();

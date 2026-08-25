@@ -10,7 +10,7 @@ using Documents.DataStores;
 using Documents.Ids;
 using FastEndpoints;
 using FastEndpoints.AspVersioning;
-using FastEndpoints.Swagger;
+using FastEndpoints.OpenApi;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.EntityFrameworkCore;
 using NodaTime;
@@ -45,6 +45,7 @@ builder.AddServiceDefaults();
 builder.Services.AddCustomizedDependencyInjection();
 builder.Services.AddCustomOptions(builder.Configuration);
 builder.AddNpgsqlDbContext<DocumentsStore>("postgres",
+    configureSettings: settings => settings.ConnectionString = builder.Configuration.GetConnectionString("postgres")!.WithGssDisabled(),
     configureDbContextOptions: optionsBuilder =>
     {
         optionsBuilder.UseNpgsql(o => o.UseNodaTime()
@@ -52,42 +53,46 @@ builder.AddNpgsqlDbContext<DocumentsStore>("postgres",
     });
 builder.Services.AddDataStores();
 builder.Services.AddSerilog((serviceProvider, loggerConfiguration) => loggerConfiguration
-    .ReadFrom.Configuration(builder.Configuration)
-    .ReadFrom.Services(serviceProvider));
+                                                    .ReadFrom.Configuration(builder.Configuration)
+                                                    .ReadFrom.Services(serviceProvider));
 builder.Services.Configure<JsonOptions>(c => optionsSerializerSettings.Invoke(c.SerializerOptions));
 builder.Services
-    .SwaggerDocument(options =>
+    .OpenApiDocument(options =>
     {
         options.ShortSchemaNames = true;
         options.ShowDeprecatedOps = true;
         options.MaxEndpointVersion = 1;
-        options.DocumentSettings = docSettings =>
-        {
-            docSettings.ApiVersion(new(1.0));
-            docSettings.SchemaSettings.AllowReferencesWithProperties = true;
-            docSettings.SchemaSettings.TypeMappers.Add(new NumberTypeMapper<PositiveInteger, int>());
-            docSettings.SchemaSettings.TypeMappers.Add(new NumberTypeMapper<NonNegativeInteger, int>());
-        };
-        options.SerializerSettings = optionsSerializerSettings;
+        options.DocumentName = "v1";
+        options.Title = "Documents API";
+        options.Version = "v1";
         options.AutoTagPathSegmentIndex = 0;
+        options.ConfigureOpenApi = docSettings =>
+        {
+            docSettings.AddSchemaTransformer<NumberTypeSchemaTransformer<PositiveInteger, int>>();
+            docSettings.AddSchemaTransformer<NumberTypeSchemaTransformer<NonNegativeInteger, int>>();
+            docSettings.AddSchemaTransformer<NumberTypeSchemaTransformer<NonNegativeLong, long>>();
+            docSettings.AddSchemaTransformer<DocumentIdSchemaTransformer>();
+        };
     });
 
 builder.Services.AddFastEndpoints(options => options.IncludeAbstractValidators = false)
     .AddVersioning(options =>
     {
-        options.DefaultApiVersion = new ApiVersion(1, 0);
         options.AssumeDefaultVersionWhenUnspecified = true;
         options.ReportApiVersions = true;
-        HeaderApiVersionReader optionsApiVersionReader = new HeaderApiVersionReader("api-version");
-        optionsApiVersionReader.VersionsByHeader();
-        optionsApiVersionReader.VersionsByMediaType();
+        HeaderApiVersionReader optionsApiVersionReader = new("api-version");
+        // optionsApiVersionReader.VersionsByHeader();
+        // optionsApiVersionReader.VersionsByMediaType();
         options.ApiVersionReader = optionsApiVersionReader;
-        options.UnsupportedApiVersionStatusCode = Status400BadRequest;
     });
 
 WebApplication app = builder.Build();
 
 //app.UseSerilogRequestLogging(opts => opts.EnrichDiagnosticContext = (diagnosticContext, httpContext) => diagnosticContext.Set("CorrelationId", httpContext.TraceIdentifier));
+
+// OpenAPI documentation must remain reachable even if authentication/authorization middleware is added later.
+app.MapOpenApi().AllowAnonymous();
+
 app.UseFastEndpoints(config =>
 {
     config.Binding.ValueParserFor<DocumentId>(values => new ParseResult(DocumentId.TryParse(values.ToString(), CultureInfo.InvariantCulture, out DocumentId id), id));
@@ -117,16 +122,14 @@ app.UseFastEndpoints(config =>
     optionsSerializerSettings.Invoke(config.Serializer.Options);
 });
 
-app.UseOpenApi(opts => opts.Path = "/openapi/{documentName}.json");
 app.MapScalarApiReference(opts =>
 {
-    opts.AddDocuments(
-    [
-        new ScalarDocument("v1", "Documents API v1", IsDefault: true)
-    ]);
-    opts.ForceDarkMode();
-});
+    opts.AddDocument("v1");
+    opts.AddDocument("v2");
+}).AllowAnonymous();
 
+// Scalar emits relative asset URLs, so browsing "/scalar/v1/" resolves them one segment too deep.
+// Redirecting back to the canonical asset path keeps the reference page usable with a trailing slash.
 app.MapGet("/scalar/{documentName}/{**asset}", (string asset) => Results.LocalRedirect($"/scalar/{asset}"))
    .AllowAnonymous()
    .ExcludeFromDescription();
