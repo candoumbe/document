@@ -33,6 +33,7 @@
         "Clean",
         "Coldfix",
         "Compile",
+        "DeleteContainerImages",
         "Feature",
         "Format",
         "Hotfix",
@@ -186,6 +187,11 @@
           "type": "boolean",
           "description": "Ignore unreachable sources during Restore"
         },
+        "ImageAdminToken": {
+          "type": "string",
+          "description": "Token with delete:packages access to the GitHub Container Registry",
+          "default": "Secrets must be entered via 'nuke :secrets [profile]'"
+        },
         "Issues": {
           "type": "array",
           "description": "Issues that will be closed once the pull request is completed",
@@ -206,6 +212,17 @@
           "description": "API Key to use for accessing the NuGet repository",
           "default": "Secrets must be entered via 'nuke :secrets [profile]'"
         },
+        "Packages": {
+          "type": "array",
+          "description": "Name of packages to delete",
+          "items": {
+            "type": "string"
+          }
+        },
+        "RegistryUri": {
+          "type": "string",
+          "description": "URI of the GitHub Container Registry"
+        },
         "SkipConfirmation": {
           "type": "boolean",
           "description": "Set to true to not ask any confirmation to the end user (default: false)"
@@ -213,6 +230,10 @@
         "Solution": {
           "type": "string",
           "description": "Path to a solution file that is automatically loaded"
+        },
+        "TagPattern": {
+          "type": "string",
+          "description": "Tag pattern used to identify which tags to delete. The pattern supports '*' and '?' wildcards. For example, 'v1.*' will match all tags starting with 'v1.'"
         },
         "Title": {
           "type": "string",
