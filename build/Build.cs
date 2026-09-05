@@ -91,7 +91,8 @@ public class Build : EnhancedBuild,
     IReportIntegrationTestCoverage,
     IPushNugetPackages,
     ICreateGithubRelease,
-    ICanRegenerateGitHubWorkflows
+    ICanRegenerateGitHubWorkflows,
+    ICanDeleteContainerPackages
 {
 
     [Solution] [Required] public readonly Solution Solution;
