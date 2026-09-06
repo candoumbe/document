@@ -33,7 +33,7 @@ echo "[post-create] Verifying Docker installation"
 docker --version
 echo "[post-create] Docker is available"
 
-# Install squad 
+# Install squad
 # Install squad CLI globally
 log_info "Installing squad CLI globally..."
 npm install -g @bradygaster/squad-cli > /dev/null 2>&1
