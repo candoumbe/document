@@ -19,8 +19,8 @@
     <PackageReference Include="Microsoft.Build.Tasks.Core" />
     <PackageReference Include="Microsoft.Build.Utilities.Core" />
     <PackageReference Include="NuGet.Packaging" />
-<PackageDownload Include="GitVersion.Tool" Version="[6.1.0]" />
-    <PackageDownload Include="dotnet-stryker" Version="[4.8.1]" />
+    <PackageDownload Include="GitVersion.Tool" Version="[6.1.0]" />
+    <PackageDownload Include="dotnet-stryker" Version="[4.16.0]" />
     <PackageDownload Include="dotnet-ef" Version="[10.0.0]" />
   </ItemGroup>
 

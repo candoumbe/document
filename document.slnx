@@ -34,7 +34,7 @@
   <Folder Name="/tests/Documents.API.UnitTests/">
     <Project Path="tests/Documents.API.UnitTests/Documents.API.UnitTests.csproj" />
   </Folder>
-  <Folder Name="/tests/Documents.Objects.Tests/">
-    <Project Path="tests/Documents.Objects.Tests/Documents.Objects.Tests.csproj" />
+  <Folder Name="/tests/Documents.Objects.UnitTests/">
+    <Project Path="tests/Documents.Objects.UnitTests/Documents.Objects.UnitTests.csproj" />
   </Folder>
 </Solution>

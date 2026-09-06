@@ -6,6 +6,7 @@ using Candoumbe.Pipelines.Components.Formatting;
 using Candoumbe.Pipelines.Components.GitHub;
 using Candoumbe.Pipelines.Components.NuGet;
 using Candoumbe.Pipelines.Components.Workflows;
+using Candoumbe.Pipelines.Tools;
 using Documents.Aspire;
 using Fallout.Common;
 using Fallout.Common.CI.GitHubActions;
@@ -85,7 +86,7 @@ public class Build : EnhancedBuild,
     IClean,
     IRestore,
     IDotnetFormat,
-    // IMutationTest,
+    IMutationTest,
     IBenchmark,
     IReportUnitTestCoverage,
     IReportIntegrationTestCoverage,
@@ -132,8 +133,6 @@ public class Build : EnhancedBuild,
         .ResetProjectFile()
         .ClearLoggers()
         .SetProcessAdditionalArguments($"--project {testRunContext.project.Path}");
-
-
 
     ///<inheritdoc/>
     IEnumerable<Project> IBenchmark.BenchmarkProjects => this.Get<IHaveSolution>().Solution.GetAllProjects("*.PerformanceTests");
@@ -555,16 +554,31 @@ public class Build : EnhancedBuild,
             .TryBefore<ICreateGithubRelease>(x => x.AddGithubRelease)
             .Consumes(this.Get<ICompile>().Compile);
 
-    // /// <summary>
-    // /// Projects to be targeted by mutation tests.
-    // /// </summary>
-    // private static readonly string[] s_projects = ["Documents.Ids", "Documents.Objects", "Documents.API"];
+    /// <summary>
+    /// Projects to be targeted by mutation tests.
+    /// </summary>
+    private static readonly string[] s_projects = ["Documents.Objects", "Documents.API"];
 
-    // /// <inheritdoc />
-    // IEnumerable<MutationProjectConfiguration> IMutationTest.MutationTestsProjects =>
-    // [
-    //     ..s_projects.Select(projectName => new MutationProjectConfiguration(sourceProject: Solution.AllProjects.Single(csproj => csproj.Name == projectName),
-    //                                                                        testProjects: Solution.AllProjects.Where(csproj => string.Equals(csproj.Name, $"{projectName}.UnitTests")),
-    //                                                                        configurationFile: this.Get<IHaveTestDirectory>().TestDirectory / $"{projectName}.UnitTests" / "stryker-config.json"))
-    // ];
+    /// <inheritdoc />
+    IEnumerable<MutationProjectConfiguration> IMutationTest.MutationTestsProjects =>
+    [
+        ..s_projects.Select(projectName => new MutationProjectConfiguration(sourceProject: Solution.AllProjects.Single(csproj => csproj.Name == projectName),
+                                                                           testProjects: Solution.AllProjects.Where(csproj => string.Equals(csproj.Name, $"{projectName}.UnitTests")),
+                                                                           configurationFile: this.Get<IHaveTestDirectory>().TestDirectory / $"{projectName}.UnitTests" / "stryker-config.json"))
+    ];
+
+
+    /// <summary>
+    /// Gets the Stryker settings for mutation testing.
+    /// </summary>
+    Configure<StrykerSettings> IMutationTest.StrykerArgumentsSettings => settings =>
+    {
+        if (EnvironmentInfo.HasVariable("IS_DEVCONTAINER"))
+        {
+            Information("Running in a dev container, adjusting Stryker settings accordingly.");
+            settings = settings.ResetOpenReport();
+        }
+
+        return settings;
+    };
 }
