@@ -87,7 +87,7 @@
     <PackageVersion Include="SystemTextJsonPatch" Version="5.0.0" />
     <PackageVersion Include="TestContainers.PostgreSql" Version="4.15.0" />
     <PackageVersion Include="TngTech.ArchUnitNET.xUnitV3" Version="0.13.4" />
-    <PackageVersion Include="xRetry.v3" Version="1.0.0-rc3" />
+    <PackageVersion Include="xRetry.v3" Version="1.0.0" />
     <PackageVersion Include="Xunit.DependencyInjection.Logging" Version="12.0.0" />
     <PackageVersion Include="Xunit.OpenCategories.V3" Version="2.4.1.19" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.5" />
