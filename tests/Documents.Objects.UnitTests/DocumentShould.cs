@@ -5,11 +5,11 @@ using Documents.Ids;
 using Xunit;
 using Xunit.OpenCategories.V3;
 
-namespace Documents.Objects.Tests;
+namespace Documents.Objects.UnitTests;
 
 [UnitTest]
 [Feature("Documents")]
-public class DocumentTests
+public class DocumentShould
 {
     [Fact]
     public void Ctor_builds_a_valid_instance()

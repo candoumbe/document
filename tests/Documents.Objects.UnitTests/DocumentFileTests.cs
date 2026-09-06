@@ -3,7 +3,7 @@ using AwesomeAssertions;
 using Documents.Ids;
 using Xunit;
 
-namespace Documents.Objects.Tests;
+namespace Documents.Objects.UnitTests;
 
 
 public class DocumentFileTests

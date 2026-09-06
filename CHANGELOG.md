@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### 🚀 New features
 - Initialize project
+- Re-enable mutation tests for the API and document object projects.
 
 ### 🐛 Bug fixes
 - Configure Serilog from `appsettings.json` and registered services so API sinks remain effective in containers.
